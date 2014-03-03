@@ -1,51 +1,100 @@
-//ExampleView Object constructor
-var CanvasView = function (container,model) {
-    
-    // Get all the relevant elements of the view (ones that show data
-    // and/or ones that responed to interaction)
-//    this.numberOfGuests = container.find("#numberOfGuests");
+var CanvasView = function(container, model) {
 
-//div we just store in temporary variable because we won't need it later
-    var button = $("<button>");
-    //we set the constant text
-    button.html("Do something! test button");
-    //we set the id of the total price span
-    //finally we add the button to the view container
-    container.prepend(button);
-    this.testButton = button;
+    // create an new instance of a pixi stage
+    var stage = new PIXI.Stage(0x000000, true);
+    stage.setInteractive(true);
+    var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, null);
+
+    // add the renderer view element to the DOM
+    document.body.appendChild(renderer.view);
+    renderer.view.style.position = "relative";
+    renderer.view.style.top = "0px";
+    renderer.view.style.left = "0px";
+
+    // var graphics = new PIXI.Graphics();
+
+    // graphics.setInteractive(true);
+
+    var size = 30;
+
+    var squaresX = 48; //window.innerWidth / size;
+    var squaresY = 48; //window.innerHeight / size;
+
+
+    // for (var i = squaresX - 1; i >= 0; i--) {
+    //     for (var j = squaresY - 1; j >= 0; j--) {
+    var i = 1;
+    var j = 1;
+    // var soundSquare = new SoundSquare(i, j, size, false);
+    // var xCoord = i * size;
+    // var yCoord = j * size;
+
+    // soundSquare.x = xCoord;
+    // soundSquare.y = yCoord;
+    // soundSquare.drawToCanvas();
+    // stage.addChild(soundSquare);
+
+    for (var i = 0; i < squaresX; i++) {
+        for (var j = 0; j < squaresY; j++) {
+            var soundSquare = drawBox(i, j, size);
+            stage.addChild(soundSquare);
+
+        };
+    };
+
+
+
+
+
+    //            graphics.drawRect(xPos, yPos, size, size);
+    //     }
+    // };
+
+    // graphics.mousedown = function(crapData) {
+    //     console.log('pressed graphics, + ' + JSON.stringify(crapData,null,4));
+    // };
+
+
+    // stage.addChild(graphics);
+
+    // run the render loop
+    requestAnimFrame(animate);
+
+    function animate() {
+        renderer.render(stage);
+        requestAnimFrame(animate);
+    }
+
+
     /*****************************************  
           Observer implementation    
     *****************************************/
-    
+
     //Register an observer to the model
     model.addObserver(this);
-    
+
     //This function gets called when there is a change at the model
-    this.update = function(arg){
+    this.update = function(arg) {
         //this.numberOfGuests.html(model.getSomething());
     };
 };
 
+var drawBox = function(i, j, size) {
+    var soundSquare = new PIXI.Graphics();//SoundSquare(i, j, size, false);
+    var xCoord = i * size;
+    var yCoord = j * size;
 
-    /*
-    //div we just store in temporary variable because we won't need it later
-    var div = $("<div>");
-    //we set the constant text
-    div.html("Total menu price ");
-    //and we add the text-primary class to make it blue
-    div.addClass("text-primary");
-    //total price we store in object variable (using this) so we can access it later
-    this.totalPrice = $("<span>");
-    //we set the id of the total price span
-    this.totalPrice.attr("id","totalPrice");
-    //we add total price span to the div
-    div.append(this.totalPrice);
-    //finally we add the div to the view container
-    container.append(div);
-    
-    //Set the inital values of the components
-    this.numberOfGuests.html(model.getNumberOfGuests());
-    this.totalPrice.html(model.getTotalMenuPrice());
-    */
+    soundSquare.x = xCoord;
+    soundSquare.y = yCoord;
 
- 
+    soundSquare.lineStyle(2, 0xFFFFFF, 1);
+    soundSquare.beginFill(0xFFFF0B, 0.5);
+    soundSquare.drawRect(0, 0, size, size);
+    soundSquare.hitArea = new PIXI.Rectangle(0,0,size,size);
+    soundSquare.setInteractive(true);
+
+    soundSquare.click = function(data) {
+        console.log('got click!! from X: ' + i + " from Y: " + j);
+    }
+    return soundSquare;
+}

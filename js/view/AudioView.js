@@ -57,7 +57,7 @@ AudioView.prototype.updateSoundY = function ()
 	this.xpos = (this.xpos + 1) % 16;
 }
 
-AudioView.prototype.playTone = function ()
+AudioView.prototype.playTone = function (note, velocity, delay)
 {
 	 MIDI.noteOn(0, note, velocity, delay);
 	 MIDI.noteOff(0, note, delay + 2);

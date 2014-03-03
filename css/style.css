@@ -1,0 +1,185 @@
+/*BASIC*/
+ html, body {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 100%;
+}
+.background {
+    background: url('../images/background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+/*HEADER BAR*/
+ .navbar {
+    background-color:rgba(248, 248, 248, 0.7);
+    height: 80px;
+    margin-bottom: 0;
+    border-bottom-width: 2px;
+}
+.navbar h1 {
+    margin-left: 20px;
+}
+/*HOME VIEW*/
+ .home {
+    position:absolute;
+    top:80px;
+    bottom:0;
+}
+.welcome {
+    position: fixed;
+    top:60%;
+    border:1px solid #a1a1a1;
+    padding:20px;
+    margin: -130px 30px 30px 30px;
+    background-color:rgba(248, 248, 248, 0.8);
+    border-radius:10px;
+}
+/*MENU CONTAINER VIEW*/
+.menuContainer {
+    position:absolute;
+    width: 100%;
+    top:80px;
+    bottom:0;
+}
+.menuList {
+    height:100%;
+    border-right:1px solid black;
+    border-bottom:1px solid black;
+}
+
+.menuLine {
+    border-top: solid #000 1px;
+	margin-top: 10px;
+}
+
+.menuListCenter{
+    height: 80px;
+    margin-top:15px;
+    padding:15px;
+	margin-left: auto ;
+	margin-right: auto ;
+	text-align: center;
+}
+
+.removeButton{
+    width: 16px;
+    height: 16px;
+	background-image:url('remove.png');
+	background-color: white;
+margin-left:5px;
+  border:none;
+}
+/*search*/
+.search {
+    background-color:  rgba(255, 219, 76, 0.5);
+    height: 150px;
+    padding:15px;
+    border-bottom:1px solid black;
+}
+.search h3 {
+    margin:2px;
+}
+.search .input-group {
+    width:200px;
+    float:left;
+}
+.search #dishType {
+    margin-left: 10px;
+    float:left;
+    width:100px;
+}
+
+
+
+.list {
+    /* Firefox */
+    height: -moz-calc(100% - 150px);
+    /* WebKit */
+    height: -webkit-calc(100% - 150px);
+    /* Opera */
+    height: -o-calc(100% - 150px);
+    /* Standard */
+    height: calc(100% - 150px);
+    overflow: auto;
+    padding:15px;
+    border-bottom:1px solid black;
+}
+
+/*details*/
+
+
+/*DINNER OVERVIEW*/
+.dishButton {
+	margin: 5px;
+}
+
+.dinnerOverviewNum {
+	height: 150px;
+	border-bottom: 1px solid gray;
+}
+
+.dinnerOverviewTop {
+    background-color:  rgba(255, 219, 76, 0.5);
+    height: 80px;
+	width: 100%;
+    padding:15px;
+	margin-bottom: 15px;
+    border-bottom:1px solid black;
+}
+
+.dinnerOverviewBottom {
+    height: 80px;
+	width: 100%;
+    padding:15px;
+	text-align: center;
+  margin-left: auto ;
+  margin-right: auto ;
+}
+.dinnerOverViewBottomLine{
+    height: 70px;
+    padding:15px;
+	width: 80%;
+  margin-left: auto ;
+  margin-right: auto ;
+	text-align: center;
+	border-top: 1px solid black;
+}
+.dinnerOverViewBottomLine{
+    height: 70px;
+    padding:15px;
+	width: 80%;
+  margin-left: auto ;
+  margin-right: auto ;
+	text-align: center;
+	border-top: 1px solid black;
+}
+
+.verticalLine {
+    border-left: solid #000;
+	margin-top: 10px;
+	margin-left: 80px;
+	height: 125px;
+}
+
+/*HELPERS*/
+.floatright {
+    float: right;
+}
+.floatleft {
+    float: left;
+}
+
+ .fill {
+    height: 100%;
+}
+.border-helper {
+    border:1px solid black;
+}
+
+#prepTable
+{
+  width: 80%;
+  table-layout: fixed;
+}

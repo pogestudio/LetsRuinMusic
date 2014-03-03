@@ -29,7 +29,7 @@ AudioView.prototype.loadInstrument = function ()
 	});
 }
 
-AudioView.prototype.updateSound() = function ()
+AudioView.prototype.updateSound = function ()
 {
 	alert("update sound");
 	setInterval(function(){updateSoundY()}, 300);
@@ -43,12 +43,13 @@ AudioView.prototype.updateSoundY = function ()
 
 	for(var i = y; i < 32; i++){
 		// Play tone
-		if(this.model.getCellLocal(x+xpos,y) == 1){
+		if(this.model.getCellLocal(x+this.xpos,y) == 1){
 			//TODO: Play tone with correct note
-			var note = this.tones[y % tones.length];
+			var note = this.tones[y % this.tones.length];
 			playTone(note,127,0)
 		}	
 	}
+	this.xpos = (this.xpos + 1) % 16;
 }
 
 AudioView.prototype.playNote = function ()

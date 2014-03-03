@@ -4,7 +4,7 @@ var CanvasModel = function Model() {
     this.y = 0;
     this.width = 1;
     this.height = 1;
-	
+
     this.viewData = [0];
     this.data = {};
     this.changeList = [];
@@ -15,6 +15,8 @@ CanvasModel.prototype.addObserver = function (observer) {
 }
 
 CanvasModel.prototype.notifyObservers = function () {
+    this._updateViewData();
+
     for (var i = 0; i < observers.length; i++) {
         this.observers[i].update(this);
     }
@@ -22,43 +24,43 @@ CanvasModel.prototype.notifyObservers = function () {
 }
 
 //Internal: updates viewData matrix
-CanvasModel.prototype.updateViewData = function () {
+CanvasModel.prototype._updateViewData = function () {
     this.viewData = [];
 
-    for(var i = 0 ; i < this.height; ++i) {
-        for(var j = 0 ; j < this.width; ++j) {
+    for (var i = 0 ; i < this.height; ++i) {
+        for (var j = 0 ; j < this.width; ++j) {
             var value = 0;
-			
+
             var x = j + this.x;
             var y = i + this.y;
-			
-            this.viewData.push(this.getCell(x,y));
+
+            this.viewData.push(this.getCell(x, y));
         }
     }
 }
 
 //Local coordinates: (0-width, 0-height)
-CanvasModel.prototype.getCellLocal = function(x, y) {
+CanvasModel.prototype.getCellLocal = function (x, y) {
     return this.viewData[this.width * y + x];
 }
 
 //Global coordinates
-CanvasModel.prototype.getCell = function(x, y) {
+CanvasModel.prototype.getCell = function (x, y) {
     var xlist = this.data[y];
-    if (xlist == null) 
+    if (xlist == null)
         return 0;
-    
+
     return xlist[x] | 0;
 }
 
 //Local coordinates: (0-width, 0-height)
-CanvasModel.prototype.setCellLocal = function(x, y, value) {
+CanvasModel.prototype.setCellLocal = function (x, y, value) {
     this.setCell(this.x + x, this.y + y, value);
 }
 
 //Global coordinates 
 CanvasModel.prototype.setCell = function (x, y, value) {
-    this.changeList.push({x:x, y:y, value:value});
+    this.changeList.push({ x: x, y: y, value: value });
 
     var xlist = this.data[y];
     if (xlist == null) {

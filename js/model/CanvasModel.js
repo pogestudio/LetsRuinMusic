@@ -17,7 +17,7 @@ CanvasModel.prototype.addObserver = function (observer) {
 CanvasModel.prototype.notifyObservers = function () {
     this._updateViewData();
 
-    for (var i = 0; i < observers.length; i++) {
+    for (var i = 0; i < this.observers.length; i++) {
         this.observers[i].update(this);
     }
     this.changeList = [];

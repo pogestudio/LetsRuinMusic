@@ -11,12 +11,13 @@ var AudioView = function(model){
 	this.xpos = 0;
 
 	this.updateSound();
+	this.loadInstrument();
 }
 
 AudioView.prototype.loadInstrument = function ()
 {
 	MIDI.loadPlugin({
-		soundfontUrl: "./soundfont/",
+		soundfontUrl: "././soundfont/",
 		instrument: "acoustic_grand_piano",
 		callback: function() {
 			var delay = 0; // play one note every quarter second
@@ -34,7 +35,6 @@ AudioView.prototype.loadInstrument = function ()
 AudioView.prototype.updateSound = function ()
 {
 	var audioView = this;
-	alert("update sound");
 	setInterval(function(){
 		audioView.updateSoundY();
 	}, 300);
@@ -42,14 +42,11 @@ AudioView.prototype.updateSound = function ()
 
 AudioView.prototype.updateSoundY = function ()
 {
-	alert("update sound y");	
 	var x = 16;
 	var y = 16;
 
 	for(var i = y; i < 32; i++){
-		// Play tone
 		if(this.model.getCellLocal(x+this.xpos,i) == 1){
-			//TODO: Play tone with correct note
 			var note = this.tones[y % this.tones.length];
 			this.playTone(note,127,0)
 		}	

@@ -24,8 +24,14 @@ var CanvasView = function (container,model) {
     this.update = function(arg){
         //this.numberOfGuests.html(model.getSomething());
     };
-};
 
+  
+
+
+
+
+
+};
 
     /*
     //div we just store in temporary variable because we won't need it later

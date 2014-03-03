@@ -4,6 +4,16 @@ $(function() {
 
     //We instantiate our model
     var model = new CanvasModel();
+    model.setSize(48, 48);
+
+    //Test data
+    model.setCell(3, 5, 1);
+    model.setCell(4, 5, 1);
+    model.setCell(5, 5, 1);
+    model.setCell(6, 5, 1);
+    model.setCell(7, 5, 1);
+
+    model._updateViewData();
 
     //And create the needed controllers and views
     var canvasView = new CanvasView($("#canvasView"), model);

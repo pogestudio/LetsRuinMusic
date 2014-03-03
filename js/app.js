@@ -13,7 +13,7 @@ $(function() {
     model.setCell(6, 5, 1);
     model.setCell(7, 5, 1);
 
-    model._updateViewData();
+    model.notifyObservers();
 
     //And create the needed controllers and views
     var canvasView = new CanvasView($("#canvasView"), model);

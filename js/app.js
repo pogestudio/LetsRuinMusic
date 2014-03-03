@@ -18,6 +18,7 @@ $(function() {
     //And create the needed controllers and views
     var canvasView = new CanvasView($("#canvasView"), model);
     var canvasViewController = new CanvasViewController(canvasView, model);
-
+	
+    var audioView = new AudioView(model);
 });
 window.navigate = {};

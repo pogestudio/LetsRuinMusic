@@ -15,47 +15,22 @@ var CanvasView = function(container, model) {
 
     // graphics.setInteractive(true);
 
-    var size = 30;
+    var size = window.innerWidth/48;
 
-    var squaresX = 48; //window.innerWidth / size;
-    var squaresY = 48; //window.innerHeight / size;
+    var squaresX = 48;
+    var squaresY = 48;
 
-
-    // for (var i = squaresX - 1; i >= 0; i--) {
-    //     for (var j = squaresY - 1; j >= 0; j--) {
-    var i = 1;
-    var j = 1;
-    // var soundSquare = new SoundSquare(i, j, size, false);
-    // var xCoord = i * size;
-    // var yCoord = j * size;
-
-    // soundSquare.x = xCoord;
-    // soundSquare.y = yCoord;
-    // soundSquare.drawToCanvas();
-    // stage.addChild(soundSquare);
 
     for (var i = 0; i < squaresX; i++) {
         for (var j = 0; j < squaresY; j++) {
+
             var soundSquare = drawBox(i, j, size);
+
             stage.addChild(soundSquare);
 
         };
     };
 
-
-
-
-
-    //            graphics.drawRect(xPos, yPos, size, size);
-    //     }
-    // };
-
-    // graphics.mousedown = function(crapData) {
-    //     console.log('pressed graphics, + ' + JSON.stringify(crapData,null,4));
-    // };
-
-
-    // stage.addChild(graphics);
 
     // run the render loop
     requestAnimFrame(animate);

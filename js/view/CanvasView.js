@@ -1,37 +1,26 @@
 var CanvasView = function(container, model) {
 
     this.soundSquares = [];
+
     // create an new instance of a pixi stage
     var stage = new PIXI.Stage(0x000000, true);
     var container = new PIXI.DisplayObjectContainer();
     stage.setInteractive(true);
     var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, null);
+
     // add the renderer view element to the DOM
     document.body.appendChild(renderer.view);
     renderer.view.style.position = "relative";
     renderer.view.style.top = "0px";
     renderer.view.style.left = "0px";
+
     // numbers for the squares/grid
-    var size = window.innerWidth / 48;
-    var squaresX = 48;
-    var squaresY = 48;
+    var numOfSquares = 48;
     var offsetY = (window.innerWidth - window.innerHeight) / 2;
 
-
-
-    for (var j = 0; j < squaresY; j++) {
-        this.soundSquares[j] = [];
-        for (var i = 0; i < squaresX; i++) {
-            var soundSquare = drawBox(i, j, size, model);
-            container.addChild(soundSquare);
-            this.setSoundSquare(i,j,soundSquare);
-        }
-    }
-
+    this.populateCanvas(numOfSquares, container, model);
     container.position.y = -offsetY;
     stage.addChild(container);
-
-
 
     // run the render loop
     requestAnimFrame(animate);
@@ -55,11 +44,20 @@ var CanvasView = function(container, model) {
     };
 };
 
-var drawField = function(model) {
+CanvasView.prototype.populateCanvas = function(numOfSquares, container, model) {
+    var size = window.innerWidth / numOfSquares;
 
-}
+    for (var j = 0; j < numOfSquares; j++) {
+        this.soundSquares[j] = [];
+        for (var i = 0; i < numOfSquares; i++) {
+            var soundSquare = this.createSoundSquare(i, j, size, model);
+            container.addChild(soundSquare);
+            this.setSoundSquare(i, j, soundSquare);
+        }
+    }
+};
 
-var drawBox = function(i, j, size, model) {
+CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
     var soundSquare = new PIXI.Graphics(); //SoundSquare(i, j, size, false);
     var xCoord = i * size;
     var yCoord = j * size;
@@ -98,7 +96,7 @@ var drawBox = function(i, j, size, model) {
         console.log('value after click: ' + model.getCellLocal(i, j));
     };
     return soundSquare;
-}
+};
 
 CanvasView.prototype.setSoundSquare = function(x, y, square) {
     this.soundSquares[y][x] = square;

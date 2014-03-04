@@ -2,31 +2,33 @@ var CanvasView = function(container, model) {
 
     // create an new instance of a pixi stage
     var stage = new PIXI.Stage(0x000000, true);
+    var container = new PIXI.DisplayObjectContainer();
     stage.setInteractive(true);
     var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, null);
-
     // add the renderer view element to the DOM
     document.body.appendChild(renderer.view);
     renderer.view.style.position = "relative";
     renderer.view.style.top = "0px";
     renderer.view.style.left = "0px";
-
-    // var graphics = new PIXI.Graphics();
-
-    // graphics.setInteractive(true);
+    
 
     var size = window.innerWidth / 48;
-
     var squaresX = 48;
     var squaresY = 48;
+
+    var offsetY = (window.innerWidth - window.innerHeight)/2;
 
 
     for (var i = 0; i < squaresX; i++) {
         for (var j = 0; j < squaresY; j++) {
             var soundSquare = drawBox(i, j, size, model);
-            stage.addChild(soundSquare);
+            container.addChild(soundSquare);
         }
     }
+
+    container.position.y = -offsetY;
+
+    stage.addChild(container);
 
 
     // run the render loop
@@ -64,11 +66,23 @@ var drawBox = function(i, j, size, model) {
     soundSquare.y = yCoord;
 
     soundSquare.lineStyle(2, 0xFFFFFF, 1);
+
+    // var blurFilter = new PIXI.BlurFilter();
+
+    if(i<16 || i > 31 || j < 16 || j > 31)
+    {
+
+    // soundSquare.filters = [blurFilter];
+    soundSquare.alpha = 0.1;
+    }
+
+
     if (model.getCellLocal(i, j)) {
         soundSquare.beginFill(0xFFFF0B, 0.5);
     } else {
         soundSquare.beginFill(0x00AA0B, 0.5);
     }
+
     soundSquare.drawRect(0, 0, size, size);
     soundSquare.hitArea = new PIXI.Rectangle(0, 0, size, size);
     soundSquare.setInteractive(true);

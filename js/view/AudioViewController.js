@@ -8,8 +8,10 @@ var AudioViewController = function(model){
     ];
     
     this.instruments = {}
-    this.instruments['1'] = 0; //acoustic_grand_piano
+
+    this.instruments['1'] = 24//acoustic_guitar_nylon
     this.instruments['2'] = 65; //alto_sax
+    this.instruments['3'] = 0; //acoustic_grand_piano
 
     this.interval = null;
     this.loadInstrument();
@@ -22,8 +24,8 @@ AudioViewController.prototype.loadInstrument = function ()
 {
     MIDI.loadPlugin({
 	soundfontUrl: "././soundfont/",
-	instrument: "acoustic_grand_piano",
-	instruments: ["acoustic_grand_piano", "alto_sax"],
+	instrument: "acoustic_guitar_nylon",
+	instruments: ["acoustic_grand_piano", "alto_sax", "acoustic_guitar_nylon"],
     });
 }
 

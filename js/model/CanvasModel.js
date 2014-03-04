@@ -26,6 +26,8 @@ CanvasModel.prototype.notifyObservers = function() {
         this.observers[i].update(this);
     }
     this.changeList = [];
+    this.minimapData.clearChangeList();
+
 };
 
 //Internal: updates viewData matrix

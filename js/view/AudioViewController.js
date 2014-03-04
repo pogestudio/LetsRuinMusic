@@ -1,18 +1,13 @@
-var AudioViewController = function(model){
+var AudioViewController = function(model, audioModel){
     this.model = model;	
+    this.audioModel = audioModel;
 
     this.tones = [
 	45,47,48,50,52,53,55,
 	57,59,60,62,64,65,67,
 	69,71,72,74,76,77,79
     ];
-    
-    this.instruments = {}
-
-    this.instruments['1'] = 24//acoustic_guitar_nylon
-    this.instruments['2'] = 65; //alto_sax
-    this.instruments['3'] = 0; //acoustic_grand_piano
-    this.instruments['4'] = 118; //synth_drum
+    this.instruments = this.audioModel.getInstruments();
 
     this.interval = null;
     this.loadInstrument();
@@ -20,13 +15,11 @@ var AudioViewController = function(model){
     this.duration = 300;
 }
 
-
-
 AudioViewController.prototype.loadInstrument = function () {
     var avc = this;
     MIDI.loadPlugin({
         soundfontUrl: "././soundfont/",
-        instruments: ["acoustic_grand_piano", "alto_sax", "acoustic_guitar_nylon", "synth_drum"],
+        instruments: this.audioModel.getInstrNameList(),
         callback: avc.updateSound,
         source: this,
     });
@@ -58,8 +51,6 @@ AudioViewController.prototype.updateSoundY = function ()
     this.xpos = (this.xpos + 1) % 16;
 }
 
-
-
 AudioViewController.prototype.playToneInstr = function (note, velocity, delay, instr)
 {
     MIDI.programChange(0, instr);
@@ -72,7 +63,6 @@ AudioViewController.prototype.playTone = function (note, velocity, delay)
     MIDI.noteOn(0, note, velocity, delay);
     MIDI.noteOff(0, note, delay + 2);
 }
-
 
 AudioViewController.prototype.getInstruments = function()
 {

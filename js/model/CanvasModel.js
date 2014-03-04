@@ -8,6 +8,7 @@ var CanvasModel = function() {
     this.viewData = [0];
     this.data = {};
     this.changeList = [];
+    this.name = "Awesome client";
 
     //Params: Values per cell, width(cells), height(cell)
     this.minimapData = new MinimapData(2, 50, 50);

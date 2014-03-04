@@ -7,37 +7,36 @@ var AudioView = function(model){
 	57,59,60,62,64,65,67,
 	69,71,72,74,76,77,79
     ];
+    
+    this.instruments = {}
+    this.instruments['1'] = 0; //acoustic_grand_piano
+    this.instruments['2'] = 65; //alto_sax
 
-    this.xpos = 0;
-
-    this.updateSound();
+    this.interval = null;
     this.loadInstrument();
+    this.xpos = 0;
+    this.updateSound(300); //300ms interval
 }
+
 
 AudioView.prototype.loadInstrument = function ()
 {
     MIDI.loadPlugin({
 	soundfontUrl: "././soundfont/",
 	instrument: "acoustic_grand_piano",
-	callback: function() {
-	    var delay = 0; // play one note every quarter second
-	    var note = 50; // the MIDI note
-	    var velocity = 127; // how hard the note hits
-	    // MIDI.programChange(0,73);
-	    // play the note
-	    MIDI.setVolume(0, 127);
-	    //MIDI.noteOn(0, note, velocity, delay) // Play middle C on Channel 0
-	    //MIDI.noteOff(0, note, delay + 2);
-	}
+	instruments: ["acoustic_grand_piano", "alto_sax"],
     });
 }
 
-AudioView.prototype.updateSound = function ()
+AudioView.prototype.updateSound = function (duration)
 {
+    if (this.interval != null)
+	window.clearInterval(this.interval);
+
     var audioView = this;
-    setInterval(function(){
+    this.interval = setInterval(function(){
 	audioView.updateSoundY();
-    }, 300);
+    }, duration);
 }
 
 AudioView.prototype.updateSoundY = function ()
@@ -46,16 +45,33 @@ AudioView.prototype.updateSoundY = function ()
     var y = 16;
 
     for(var i = y; i < 32; i++){
-	if(this.model.getCellLocal(x+this.xpos,i) == 1){
+	var dbint = this.model.getCellLocal(x+this.xpos,i);
+	if(dbint != 0 && dbint <= Object.keys(this.instruments).length){
 	    var note = this.tones[y % this.tones.length];
-	    this.playTone(note,127,0)
-	}	
+	    var instr = this.instruments[dbint];
+	    this.playToneInstr(note,127,0,instr);
+	}
     }
     this.xpos = (this.xpos + 1) % 16;
 }
 
 AudioView.prototype.playTone = function (note, velocity, delay)
 {
+    //MIDI.programChange(0, this.instruments['2']);
     MIDI.noteOn(0, note, velocity, delay);
     MIDI.noteOff(0, note, delay + 2);
+}
+
+
+AudioView.prototype.playToneInstr = function (note, velocity, delay, instr)
+{
+    MIDI.programChange(0, instr);
+    MIDI.noteOn(0, note, velocity, delay);
+    MIDI.noteOff(0, note, delay + 2);
+}
+
+
+AudioView.prototype.getInstruments = function()
+{
+    return this.instruments;
 }

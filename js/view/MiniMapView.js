@@ -1,4 +1,6 @@
 var MiniMapView = function(container, model) {
+    
+    this.changeList = [];
 
 
 
@@ -35,25 +37,25 @@ var MiniMapView = function(container, model) {
 
 
     var getChangeList = function() {
-        var changeList = [];
-        changeList.push({
-            x: Math.floor(Math.random() * amountOfSquares),
-            y: Math.floor(Math.random() * amountOfSquares),
-            value: Math.random() > 0.5 ? 0 : 1,
-        });
-        changeList.push({
-            x: Math.floor(Math.random() * amountOfSquares),
-            y: Math.floor(Math.random() * amountOfSquares),
-            value: Math.random() > 0.5 ? 0 : 1,
-        });
-        return changeList;
+        // var changeList = [];
+        // changeList.push({
+        //     x: Math.floor(Math.random() * amountOfSquares),
+        //     y: Math.floor(Math.random() * amountOfSquares),
+        //     value: Math.random() > 0.5 ? 0 : 1,
+        // });
+        // changeList.push({
+        //     x: Math.floor(Math.random() * amountOfSquares),
+        //     y: Math.floor(Math.random() * amountOfSquares),
+        //     value: Math.random() > 0.5 ? 0 : 1,
+        // });
+        // return changeList;
     };
 
     var self = this;
 
     function animate() {
-        var listOfUpdatedIcons = getChangeList();
-        self._drawIconsFromChangeList(listOfUpdatedIcons, amountOfSquares, squareSize, stage);
+        //var listOfUpdatedIcons = getChangeList();
+        self._drawIconsFromChangeList(self.changeList, amountOfSquares, squareSize, stage);
         renderer.render(stage);
         requestAnimFrame(animate);
     }
@@ -63,11 +65,12 @@ var MiniMapView = function(container, model) {
           Observer implementation    
     *****************************************/
 
-    //Register an observer to the model
+    //Register an observer to the OLD MODEL
     model.addObserver(this);
 
     //This function gets called when there is a change at the model
     this.update = function(arg) {
+        this.changeList = model.minimapData.changeList;
         //this.numberOfGuests.html(model.getSomething());
     };
 };
@@ -102,9 +105,9 @@ MiniMapView.prototype._drawIconsFromChangeList = function(changeList, amountOfSq
 
 MiniMapView.prototype._updateSquareAtPosition = function(x, y, value, size) {
     var square = this.miniMapSquares[y][x];
-
+    var percentageFade = value /4;
     if (value) {
-        square.beginFill(0xFFFFFF, 1);
+        square.beginFill(0xFFFFFF, percentageFade);
     } else {
         square.beginFill(0x000000, 1);
     }

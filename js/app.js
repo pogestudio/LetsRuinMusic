@@ -7,11 +7,11 @@ $(function() {
     model.setSize(48, 48);
 
     //Test data
-    model.setCell(3, 5, 1);
-    model.setCell(4, 5, 1);
-    model.setCell(5, 5, 1);
-    model.setCell(6, 5, 1);
-    model.setCell(7, 5, 1);
+    model.setCell(18, 18, 1);
+    model.setCell(24, 18, 1);
+    model.setCell(25, 18, 1);
+    model.setCell(26, 18, 1);
+    model.setCell(27, 18, 1);
 
     model.notifyObservers();
 

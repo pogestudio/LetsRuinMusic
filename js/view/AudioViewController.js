@@ -12,6 +12,7 @@ var AudioViewController = function(model){
     this.instruments['1'] = 24//acoustic_guitar_nylon
     this.instruments['2'] = 65; //alto_sax
     this.instruments['3'] = 0; //acoustic_grand_piano
+    this.instruments['4'] = 118; //synth_drum
 
     this.interval = null;
     this.loadInstrument();
@@ -24,8 +25,7 @@ AudioViewController.prototype.loadInstrument = function ()
 {
     MIDI.loadPlugin({
 	soundfontUrl: "././soundfont/",
-	instrument: "acoustic_guitar_nylon",
-	instruments: ["acoustic_grand_piano", "alto_sax", "acoustic_guitar_nylon"],
+	instruments: ["acoustic_grand_piano", "alto_sax", "acoustic_guitar_nylon", "synth_drum"],
     });
 }
 
@@ -48,8 +48,9 @@ AudioViewController.prototype.updateSoundY = function ()
     for(var i = y; i < 32; i++){
 	var dbint = this.model.getCellLocal(x+this.xpos,i);
 	if(dbint != 0 && dbint <= Object.keys(this.instruments).length){
-	    var note = this.tones[y % this.tones.length];
+	    var note = this.tones[(32-i) % this.tones.length];
 	    var instr = this.instruments[dbint];
+	    console.log(note+"   "+i);
 	    this.playToneInstr(note,127,0,instr);
 	}
     }

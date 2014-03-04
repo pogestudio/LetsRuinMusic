@@ -7,7 +7,7 @@
     this.y = 0;
     this.width = width;
     this.height = height;
-}
+};
 
 //Observer impl
 MinimapData.prototype.update = function (model) {
@@ -24,7 +24,7 @@ MinimapData.prototype.update = function (model) {
     this._cleanChangeList();
     if (this.changeList.length > 0)
         this._buildViewData();
-}
+};
 
 MinimapData.prototype._put = function (gx, gy, value, prev) {
     var cx =  Math.floor(gx / this.valuesPerCell);
@@ -37,8 +37,8 @@ MinimapData.prototype._put = function (gx, gy, value, prev) {
     }
 
     var yval = xlist[cx] || 0;
-    if (value != 0) {
-        if (prev == 0) {
+    if (value !== 0) {
+        if (prev === 0) {
             xlist[cx] = yval + 1;//+1
             this.changeList.push({
                 x: cx,
@@ -48,7 +48,7 @@ MinimapData.prototype._put = function (gx, gy, value, prev) {
         }
     }
     else {
-        if (prev != 0) {
+        if (prev !== 0) {
             xlist[cx] = yval - 1;//-1
             this.changeList.push({
                 x: cx,
@@ -57,7 +57,7 @@ MinimapData.prototype._put = function (gx, gy, value, prev) {
             });
         }
     }
-}
+};
 
 //Global coordinates
 MinimapData.prototype.getCell = function (x, y) {
@@ -88,12 +88,12 @@ MinimapData.prototype._cleanChangeList = function () {
     }
 
     var res = [];
-    for (var i = resIndex.length - 1; i >= 0; --i) {
-        res.push(this.changeList[resIndex[i]]);
+    for (var j = resIndex.length - 1; j >= 0; --j) {
+        res.push(this.changeList[resIndex[j]]);
     }
 
     this.changeList = res;
-}
+};
 
 MinimapData.prototype._buildViewData = function () {
     this.viewData = [];
@@ -108,7 +108,7 @@ MinimapData.prototype._buildViewData = function () {
             this.viewData.push(this.getCell(x, y));
         }
     }
-}
+};
 
 MinimapData.prototype.getCellLocal = function (x, y) {
     return this.viewData[this.width * y + x];

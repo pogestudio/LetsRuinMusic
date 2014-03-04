@@ -18,6 +18,8 @@ Connection.prototype.connect = function (host) {
     this.socket.onopen = function (event) {
         var helloData = {};
         helloData.name = connection.model.name;
+        helloData.state = {};
+        helloData.state
 
         connection.socket.send("{\"hello\":\"World\"}");
         console.log("Connection opened");

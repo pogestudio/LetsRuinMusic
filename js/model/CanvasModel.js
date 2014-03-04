@@ -1,4 +1,4 @@
-var CanvasModel = function Model() {
+var CanvasModel = function() {
     this.observers = [];
     this.x = 0;
     this.y = 0;
@@ -8,6 +8,9 @@ var CanvasModel = function Model() {
     this.viewData = [0];
     this.data = {};
     this.changeList = [];
+
+    //Params: Values per cell, width(cells), height(cell)
+    this.minimapData = new MinimapData(2, 50, 50);
 };
 
 CanvasModel.prototype.addObserver = function(observer) {
@@ -16,6 +19,8 @@ CanvasModel.prototype.addObserver = function(observer) {
 
 CanvasModel.prototype.notifyObservers = function() {
     this._updateViewData();
+
+    this.minimapData.update(this);
 
     for (var i = 0; i < this.observers.length; i++) {
         this.observers[i].update(this);
@@ -60,19 +65,22 @@ CanvasModel.prototype.setCellLocal = function(x, y, value) {
 
 //Global coordinates 
 CanvasModel.prototype.setCell = function(x, y, value) {
-    this.changeList.push({
-        x: x,
-        y: y,
-        value: value
-    });
 
     var xlist = this.data[y];
     if (xlist === undefined) {
         xlist = {};
         this.data[y] = xlist;
     }
+    
+    this.changeList.push({
+        x: x,
+        y: y,
+        value: value,
+        prev: xlist[x] || 0
+        });
 
     xlist[x] = value;
+
 };
 
 //Global coordinates 

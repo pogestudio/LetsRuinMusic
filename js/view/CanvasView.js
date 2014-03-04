@@ -15,7 +15,7 @@ var CanvasView = function(container, model) {
 
     // graphics.setInteractive(true);
 
-    var size = window.innerWidth/48;
+    var size = window.innerWidth / 48;
 
     var squaresX = 48;
     var squaresY = 48;
@@ -23,13 +23,10 @@ var CanvasView = function(container, model) {
 
     for (var i = 0; i < squaresX; i++) {
         for (var j = 0; j < squaresY; j++) {
-
-            var soundSquare = drawBox(i, j, size);
-
+            var soundSquare = drawBox(i, j, size, model);
             stage.addChild(soundSquare);
-
-        };
-    };
+        }
+    }
 
 
     // run the render loop
@@ -54,8 +51,12 @@ var CanvasView = function(container, model) {
     };
 };
 
-var drawBox = function(i, j, size) {
-    var soundSquare = new PIXI.Graphics();//SoundSquare(i, j, size, false);
+var drawField = function(model) {
+
+}
+
+var drawBox = function(i, j, size, model) {
+    var soundSquare = new PIXI.Graphics(); //SoundSquare(i, j, size, false);
     var xCoord = i * size;
     var yCoord = j * size;
 
@@ -63,13 +64,23 @@ var drawBox = function(i, j, size) {
     soundSquare.y = yCoord;
 
     soundSquare.lineStyle(2, 0xFFFFFF, 1);
-    soundSquare.beginFill(0xFFFF0B, 0.5);
+    if (model.getCellLocal(i, j)) {
+        soundSquare.beginFill(0xFFFF0B, 0.5);
+    } else {
+        soundSquare.beginFill(0x00AA0B, 0.5);
+    }
     soundSquare.drawRect(0, 0, size, size);
-    soundSquare.hitArea = new PIXI.Rectangle(0,0,size,size);
+    soundSquare.hitArea = new PIXI.Rectangle(0, 0, size, size);
     soundSquare.setInteractive(true);
 
     soundSquare.click = function(data) {
         console.log('got click!! from X: ' + i + " from Y: " + j);
-    }
+        console.log('value before click: ' + model.getCellLocal(i, j));
+        var currentValue = model.getCellLocal(i, j);
+        var newValue = 1-currentValue;
+        model.setCellLocal(i, j, newValue);
+        model.notifyObservers();
+        console.log('value after click: ' + model.getCellLocal(i, j));
+    };
     return soundSquare;
 }

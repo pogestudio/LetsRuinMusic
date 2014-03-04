@@ -10,6 +10,8 @@ $(function() {
     model.setCell(16, 16, 1);
     model.setCell(17, 17, 1);
     model.setCell(18, 18, 1);
+    model.setCell(19, 19, 1);
+    model.setCell(20, 20, 1);
     model.setCell(24, 30, 1);
     model.setCell(22, 19, 1);
     model.setCell(29, 29, 1);

@@ -1,6 +1,5 @@
 var AudioView = function(model){
     this.model = model;	
-    this.cells = {};
 
     this.tones = [
 	45,47,48,50,52,53,55,
@@ -55,17 +54,17 @@ AudioView.prototype.updateSoundY = function ()
     this.xpos = (this.xpos + 1) % 16;
 }
 
-AudioView.prototype.playTone = function (note, velocity, delay)
-{
-    //MIDI.programChange(0, this.instruments['2']);
-    MIDI.noteOn(0, note, velocity, delay);
-    MIDI.noteOff(0, note, delay + 2);
-}
 
 
 AudioView.prototype.playToneInstr = function (note, velocity, delay, instr)
 {
     MIDI.programChange(0, instr);
+    MIDI.noteOn(0, note, velocity, delay);
+    MIDI.noteOff(0, note, delay + 2);
+}
+
+AudioView.prototype.playTone = function (note, velocity, delay)
+{
     MIDI.noteOn(0, note, velocity, delay);
     MIDI.noteOff(0, note, delay + 2);
 }

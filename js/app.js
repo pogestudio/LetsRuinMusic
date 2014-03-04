@@ -19,6 +19,6 @@ $(function() {
     var canvasView = new CanvasView($("#canvasView"), model);
     var canvasViewController = new CanvasViewController(canvasView, model);
 	
-    var audioView = new AudioView(model);
+    var audioViewController = new AudioViewController(model);
 });
 window.navigate = {};

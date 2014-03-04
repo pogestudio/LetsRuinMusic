@@ -17,8 +17,8 @@ var CanvasView = function(container, model) {
 
     var size = window.innerWidth / 48;
 
-    var squaresX = 48;
-    var squaresY = 48;
+    var squaresX = 10;
+    var squaresY = 10;
 
 
     for (var i = 0; i < squaresX; i++) {

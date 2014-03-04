@@ -18,7 +18,11 @@ $(function() {
     //And create the needed controllers and views
     var canvasView = new CanvasView($("#canvasView"), model);
     var canvasViewController = new CanvasViewController(canvasView, model);
-	
+
+    //And create the needed controllers and views
+    var miniMapView = new MiniMapView($("#miniMapView"), model);
+    var miniMapViewController = new MiniMapViewController(miniMapView, model);
+
     var audioView = new AudioView(model);
 });
 window.navigate = {};

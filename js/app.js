@@ -4,6 +4,8 @@ $(function() {
 
     //We instantiate our model
     var model = new CanvasModel();
+    //We instantiate our audioModel
+    var audioModel = new AudioModel();
     model.setSize(48, 48);
 
     //Test data
@@ -43,6 +45,10 @@ $(function() {
     var canvasView = new CanvasView($("#canvasView"), model);
     var canvasViewController = new CanvasViewController(canvasView, model);
 	
-    var audioViewController = new AudioViewController(model);
+    var audioViewController = new AudioViewController(model, audioModel);
+
+    //And create the needed controllers and views
+    var miniMapView = new MiniMapView($("#miniMapView"), model);
+    var miniMapViewController = new MiniMapViewController(miniMapView, model);
 });
 window.navigate = {};

@@ -1,5 +1,6 @@
 var CanvasView = function(container, model) {
 
+    this.soundSquares = [];
     // create an new instance of a pixi stage
     var stage = new PIXI.Stage(0x000000, true);
     var container = new PIXI.DisplayObjectContainer();
@@ -10,25 +11,26 @@ var CanvasView = function(container, model) {
     renderer.view.style.position = "relative";
     renderer.view.style.top = "0px";
     renderer.view.style.left = "0px";
-    
-
+    // numbers for the squares/grid
     var size = window.innerWidth / 48;
     var squaresX = 48;
     var squaresY = 48;
+    var offsetY = (window.innerWidth - window.innerHeight) / 2;
 
-    var offsetY = (window.innerWidth - window.innerHeight)/2;
 
 
-    for (var i = 0; i < squaresX; i++) {
-        for (var j = 0; j < squaresY; j++) {
+    for (var j = 0; j < squaresY; j++) {
+        this.soundSquares[j] = [];
+        for (var i = 0; i < squaresX; i++) {
             var soundSquare = drawBox(i, j, size, model);
             container.addChild(soundSquare);
+            this.setSoundSquare(i,j,soundSquare);
         }
     }
 
     container.position.y = -offsetY;
-
     stage.addChild(container);
+
 
 
     // run the render loop
@@ -69,11 +71,10 @@ var drawBox = function(i, j, size, model) {
 
     // var blurFilter = new PIXI.BlurFilter();
 
-    if(i<16 || i > 31 || j < 16 || j > 31)
-    {
+    if (i < 16 || i > 31 || j < 16 || j > 31) {
 
-    // soundSquare.filters = [blurFilter];
-    soundSquare.alpha = 0.1;
+        // soundSquare.filters = [blurFilter];
+        soundSquare.alpha = 0.1;
     }
 
 
@@ -91,10 +92,18 @@ var drawBox = function(i, j, size, model) {
         console.log('got click!! from X: ' + i + " from Y: " + j);
         console.log('value before click: ' + model.getCellLocal(i, j));
         var currentValue = model.getCellLocal(i, j);
-        var newValue = 1-currentValue;
+        var newValue = 1 - currentValue;
         model.setCellLocal(i, j, newValue);
         model.notifyObservers();
         console.log('value after click: ' + model.getCellLocal(i, j));
     };
     return soundSquare;
 }
+
+CanvasView.prototype.setSoundSquare = function(x, y, square) {
+    this.soundSquares[y][x] = square;
+};
+
+CanvasView.prototype.getSoundSquare = function(x, y) {
+    return this.soundSquares[y][x];
+};

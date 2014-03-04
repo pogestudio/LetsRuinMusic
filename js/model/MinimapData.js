@@ -68,6 +68,12 @@ MinimapData.prototype.getCell = function (x, y) {
     return xlist[x] || 0;
 };
 
+
+//Global coordinates
+MinimapData.prototype.clearChangeList = function () {
+    this.changeList = [];
+};
+
 MinimapData.prototype._cleanChangeList = function () {
     var set = {};
     var resIndex = [];

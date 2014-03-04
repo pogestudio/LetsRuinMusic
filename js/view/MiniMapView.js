@@ -58,6 +58,7 @@ var MiniMapView = function(container, model) {
         self._drawIconsFromChangeList(self.changeList, amountOfSquares, squareSize, stage);
         renderer.render(stage);
         requestAnimFrame(animate);
+        self.changeList = [];
     }
 
 
@@ -106,11 +107,7 @@ MiniMapView.prototype._drawIconsFromChangeList = function(changeList, amountOfSq
 MiniMapView.prototype._updateSquareAtPosition = function(x, y, value, size) {
     var square = this.miniMapSquares[y][x];
     var percentageFade = value /4;
-    if (value) {
-        square.beginFill(0xFFFFFF, percentageFade);
-    } else {
-        square.beginFill(0x000000, 1);
-    }
+    square.beginFill(0xFFFFFF, percentageFade);
     square.drawRect(0, 0, size, size);
 };
 

@@ -17,27 +17,29 @@ var AudioViewController = function(model){
     this.interval = null;
     this.loadInstrument();
     this.xpos = 0;
-    this.updateSound(300); //300ms interval
+    this.duration = 300;
 }
 
 
-AudioViewController.prototype.loadInstrument = function ()
-{
+
+AudioViewController.prototype.loadInstrument = function () {
+    var avc = this;
     MIDI.loadPlugin({
-	soundfontUrl: "././soundfont/",
-	instruments: ["acoustic_grand_piano", "alto_sax", "acoustic_guitar_nylon", "synth_drum"],
+        soundfontUrl: "././soundfont/",
+        instruments: ["acoustic_grand_piano", "alto_sax", "acoustic_guitar_nylon", "synth_drum"],
+        callback: avc.updateSound,
+        source: this,
     });
 }
 
-AudioViewController.prototype.updateSound = function (duration)
-{
-    if (this.interval != null)
-	window.clearInterval(this.interval);
+AudioViewController.prototype.updateSound = function () {
+    if (this.source.interval != null)
+        window.clearInterval(this.source.interval);
 
-    var AudioViewController = this;
-    this.interval = setInterval(function(){
-	AudioViewController.updateSoundY();
-    }, duration);
+    var AudioViewController = this.source;
+    this.source.interval = setInterval(function () {
+        AudioViewController.updateSoundY();
+    }, AudioViewController.duration);
 }
 
 AudioViewController.prototype.updateSoundY = function ()
@@ -50,7 +52,6 @@ AudioViewController.prototype.updateSoundY = function ()
 	if(dbint != 0 && dbint <= Object.keys(this.instruments).length){
 	    var note = this.tones[(32-i) % this.tones.length];
 	    var instr = this.instruments[dbint];
-	    console.log(note+"   "+i);
 	    this.playToneInstr(note,127,0,instr);
 	}
     }

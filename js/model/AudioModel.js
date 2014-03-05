@@ -6,16 +6,18 @@ var AudioModel = function () {
     this.instruments['3'] = 0; // acoustic_grand_piano
     this.instruments['4'] = 118; //synth_drum
 
-    this.instrList =  ["acoustic_grand_piano", 
+    this.instrList =  ["acoustic_guitar_nylon", 
 		       "alto_sax", 
-		       "acoustic_guitar_nylon", 
+		       "acoustic_grand_piano", 
 		       "synth_drum"];
-}
+
+    this.dic = {}
+};
 
 AudioModel.prototype.getInstrNameList = function(){
     return this.instrList;
-}
+};
 
 AudioModel.prototype.getInstruments = function(){
     return this.instruments;
-}
+};

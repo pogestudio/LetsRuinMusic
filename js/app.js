@@ -49,6 +49,8 @@ $(function() {
     var miniMapView = new MiniMapView($("#miniMapView"), model);
     var miniMapViewController = new MiniMapViewController(miniMapView, model);
 
+    var toolbarView = new ToolbarView($("#toolbarView"), audioModel);
+
     var connection = new Connection(model);
     connection.connect("ws://localhost:12001");
 });

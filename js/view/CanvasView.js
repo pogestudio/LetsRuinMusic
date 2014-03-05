@@ -100,6 +100,42 @@ CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
 
     if (isInActive) {
         soundSquare.alpha = 0.1;
+        // use the mousedown and touchstart
+        // soundSquare.mousedown = soundSquare.touchstart = function(data)
+        // {
+        //     // stop the default event...
+        //     data.originalEvent.preventDefault();
+
+        //     // store a reference to the data
+        //     // The reason for this is because of multitouch
+        //     // we want to track the movement of this particular touch
+        //     this.data = data;
+        //     this.alpha = 0.9;
+        //     this.dragging = true;
+        // };
+
+        // // set the events for when the mouse is released or a touch is released
+        // soundSquare.mouseup = soundSquare.mouseupoutside = soundSquare.touchend = soundSquare.touchendoutside = function(data)
+        // {
+        //     this.alpha = 1
+        //     this.dragging = false;
+        //     // set the interaction data to null
+        //     this.data = null;
+        // };
+
+        // // set the callbacks for when the mouse or a touch moves
+        // soundSquare.mousemove = soundSquare.touchmove = function(data)
+        // {
+        //     if(this.dragging)
+        //     {
+        //         var newPosition = this.data.getLocalPosition(this.parent);
+        //         this.position.x = newPosition.x;
+        //         this.position.y = newPosition.y;
+        //         console.log("new position" + newPosition.x);
+        //     }
+        // };
+
+
     } else {
         soundSquare.click = function(data) {
             console.log('got click!! from X: ' + i + " from Y: " + j);

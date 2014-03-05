@@ -59,6 +59,7 @@ var CanvasView = function(containerDiv, model) {
     //This function gets called when there is a change at the model
     this.update = function(arg) {
         this.changeList = model.changeList;
+        console.error('this is called on move, but it doesnt initiate redraw at all. FIX!');
     };
 };
 

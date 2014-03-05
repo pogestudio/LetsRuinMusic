@@ -1,6 +1,7 @@
-var ToolbarView = function(view, audioModel){
-    this.model = audioModel;
-    this.instrNameList = this.model.getInstrNameList();
+var ToolbarView = function(view, audioModel, model){
+    this.audioModel = audioModel;
+    this.model = model;
+    this.instrNameList = this.audioModel.getInstrNameList();
 
     this.selInstr = null;
     this.load();
@@ -9,6 +10,7 @@ var ToolbarView = function(view, audioModel){
 ToolbarView.prototype.load = function(){    
     var view = this;
     this.selInstr = 1;
+    this.model.setInstrNr(this.selInstr);
     view.guitar = true;
     view.sax = false;
     view.piano = false;
@@ -23,7 +25,8 @@ ToolbarView.prototype.load = function(){
 	view.piano = false;
 	view.drum = false;
 	view.selInstr = 1;
-	console.log(view.getCurrInstr());
+	view.model.setInstrNr(view.selInstr);
+	console.log(view.selInstr);
     });
 
     var CB1Controller = gui.add(view, "sax").listen();
@@ -33,7 +36,8 @@ ToolbarView.prototype.load = function(){
 	view.piano = false;
 	view.drum = false;
 	view.selInstr = 2;
-	console.log(view.getCurrInstr());
+	view.model.setInstrNr(view.selInstr);
+	console.log(view.selInstr);
     });
 
     var CB1Controller = gui.add(view, "piano").listen();
@@ -43,7 +47,8 @@ ToolbarView.prototype.load = function(){
 	view.piano = true;
 	view.drum = false;
 	view.selInstr = 3;
-	console.log(view.getCurrInstr());
+	view.model.setInstrNr(view.selInstr);
+	console.log(view.selInstr);
     });
 
     var CB1Controller = gui.add(view, "drum").listen();
@@ -53,11 +58,9 @@ ToolbarView.prototype.load = function(){
 	view.piano = false;
 	view.drum = true;
 	view.selInstr = 4;
-	console.log(view.getCurrInstr());
+	view.model.setInstrNr(view.selInstr);
+	console.log(view.selInstr);
     });
 
 }
 
-ToolbarView.prototype.getCurrInstr = function(){
-    return this.selInstr;
-}

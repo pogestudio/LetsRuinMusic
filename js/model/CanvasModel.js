@@ -92,6 +92,11 @@ CanvasModel.prototype.setTopLeft = function(x, y) {
     this.y = y;
 };
 
+CanvasModel.prototype.setTopLeftOffset = function(xOff, yOff) {
+    this.x += xOff;
+    this.y += yOff;
+};
+
 CanvasModel.prototype.setSize = function(width, height) {
     this.width = width;
     this.height = height;

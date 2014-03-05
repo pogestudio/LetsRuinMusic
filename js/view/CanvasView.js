@@ -2,6 +2,7 @@ var CanvasView = function(containerDiv, model) {
 
     this.changeList = [];
     this.soundSquares = [];
+    this.model = model;
 
     // create an new instance of a pixi stage
     var stage = new PIXI.Stage(0x000000, true);
@@ -24,6 +25,7 @@ var CanvasView = function(containerDiv, model) {
     var offsetY = (window.innerWidth - window.innerHeight) / 2;
     container.position.y -= offsetY;
     var size = window.innerWidth / numOfSquares;
+    this.squareSize = size;
 
     this.populateCanvas(numOfSquares, size, container, model);
 
@@ -143,8 +145,16 @@ CanvasView.prototype.getSoundSquare = function(x, y) {
 
 CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
     // use the mousedown and touchstart
+    var firstMouseDown = {};
     var lastMouseDown = {};
-    container = this.container;
+    var squareSize = this.squareSize;
+    var model = this.model;
+
+    var container = this.container;
+    var containerOrigPos = {
+        x : container.position.x,
+        y : container.position.y,
+    };
 
     element.mousedown = element.touchstart = function(data) {
 
@@ -162,13 +172,32 @@ CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
             x: data.global.x,
             y: data.global.y,
         };
+        firstMouseDown = {
+            x: data.global.x,
+            y: data.global.y,
+        };
     };
 
     // set the events for when the mouse is released or a touch is released
     element.mouseup = element.mouseupoutside = element.touchend = element.touchendoutside = function(data) {
         this.alpha = 1;
         if (this.dragging === true) {
-console.log('SET NEW POSITION AND REDRAW EVERYTHING!!!!');
+            console.log('SET NEW POSITION AND REDRAW EVERYTHING!!!!');
+
+            //calculate how far we went
+            var xDistance = lastMouseDown.x - firstMouseDown.x;
+            var yDistance = lastMouseDown.y - firstMouseDown.y;
+            var amountOfSquaresX = ~~ (xDistance / squareSize);
+            var amountOfSquaresY = ~~ (yDistance / squareSize);
+
+            //set the new position
+            model.setTopLeftOffset(xDistance,yDistance);
+            model.notifyObservers();
+            //call redraw
+            container.x = containerOrigPos.x;
+            container.y = containerOrigPos.y;
+
+
         }
         this.dragging = false;
         // set the interaction data to null

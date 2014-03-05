@@ -2,11 +2,7 @@ var AudioViewController = function(model, audioModel){
     this.model = model;	
     this.audioModel = audioModel;
 
-    this.tones = [
-	45,47,48,50,52,53,55,
-	57,59,60,62,64,65,67,
-	69,71,72,74,76,77,79
-    ];
+    this.tones = this.audioModel.getTones();
     this.instruments = this.audioModel.getInstruments();
 
     this.interval = null;
@@ -56,9 +52,4 @@ AudioViewController.prototype.playToneInstr = function (note, velocity, delay, i
     MIDI.programChange(0, instr);
     MIDI.noteOn(0, note, velocity, delay);
 //    MIDI.noteOff(0, note, delay + 2); // It will get offed automatically
-}
-
-AudioViewController.prototype.getInstruments = function()
-{
-    return this.instruments;
 }

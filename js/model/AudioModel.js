@@ -11,7 +11,15 @@ var AudioModel = function () {
 		       "acoustic_grand_piano", 
 		       "synth_drum"];
 
-    this.dic = {}
+    this.tones = [
+	45,47,48,50,52,53,55,
+	57,59,60,62,64,65,67,
+	69,71,72,74,76,77,79
+    ];
+};
+
+AudioModel.prototype.getTones = function(){
+    return this.tones;
 };
 
 AudioModel.prototype.getInstrNameList = function(){

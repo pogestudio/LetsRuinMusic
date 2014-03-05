@@ -55,7 +55,7 @@ AudioViewController.prototype.playToneInstr = function (note, velocity, delay, i
 {
     MIDI.programChange(0, instr);
     MIDI.noteOn(0, note, velocity, delay);
-//    MIDI.noteOff(0, note, delay + 2); // It will get offed automatically
+    MIDI.noteOff(0, note, delay + 2); // It will get offed automatically
 }
 
 AudioViewController.prototype.getInstruments = function()

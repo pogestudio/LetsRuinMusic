@@ -1,6 +1,4 @@
 $(function() {
-    //The global variable so we can access it from other controller and views
-    window.stage = "starter";
 
     //We instantiate our model
     var model = new CanvasModel();
@@ -50,5 +48,8 @@ $(function() {
     //And create the needed controllers and views
     var miniMapView = new MiniMapView($("#miniMapView"), model);
     var miniMapViewController = new MiniMapViewController(miniMapView, model);
+
+    var connection = new Connection(model);
+    connection.connect("ws://localhost:12001");
 });
 window.navigate = {};

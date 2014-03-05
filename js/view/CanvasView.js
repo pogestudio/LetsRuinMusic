@@ -157,7 +157,7 @@ CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
         this.data = data;
         this.alpha = 0.9;
         this.dragging = true;
-        console.log("mouse down");
+        // console.log("mouse down");
         lastMouseDown = {
             x: data.global.x,
             y: data.global.y,
@@ -167,18 +167,21 @@ CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
     // set the events for when the mouse is released or a touch is released
     element.mouseup = element.mouseupoutside = element.touchend = element.touchendoutside = function(data) {
         this.alpha = 1;
+        if (this.dragging === true) {
+console.log('SET NEW POSITION AND REDRAW EVERYTHING!!!!');
+        }
         this.dragging = false;
         // set the interaction data to null
         this.data = null;
-        console.log("mouse up");
+        // console.log("mouse up");
 
     };
 
     // set the callbacks for when the mouse or a touch moves
     element.mousemove = element.touchmove = function(data) {
         if (this.dragging) {
-            console.log('oldPOS: ' + JSON.stringify(lastMouseDown, null, 4));
-            console.log('newPOS: ' + JSON.stringify(data.global, null, 4));
+            // console.log('oldPOS: ' + JSON.stringify(lastMouseDown, null, 4));
+            // console.log('newPOS: ' + JSON.stringify(data.global, null, 4));
             var newPosition = data.global;
             var yOffset = newPosition.y - lastMouseDown.y;
             var xOffset = newPosition.x - lastMouseDown.x;
@@ -186,7 +189,7 @@ CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
             container.position.x += xOffset;
             container.position.y += yOffset;
 
-            console.log("XOFF: " + xOffset + " YOFF: " + yOffset);
+            //console.log("XOFF: " + xOffset + " YOFF: " + yOffset);
             lastMouseDown = {
                 x: newPosition.x,
                 y: newPosition.y,

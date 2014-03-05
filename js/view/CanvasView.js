@@ -24,6 +24,10 @@ var CanvasView = function(container, model) {
     container.position.y = -offsetY;
     stage.addChild(container);
 
+    // overlay
+    var overlay = this.buildOverlay(size);
+    stage.addChild(overlay);
+
     // run the render loop
     requestAnimFrame(animate);
 
@@ -51,6 +55,22 @@ var CanvasView = function(container, model) {
     };
 };
 
+CanvasView.prototype.buildOverlay = function(size) {
+
+    var overlay = new PIXI.Graphics();
+    var fullSize = size * 16;
+    var heightHelper = (window.innerHeight - size * 16) / 2;
+
+    overlay.beginFill(0x000000, 0.5);
+    overlay.drawRect(0, 0, window.innerWidth, heightHelper);
+    overlay.drawRect(0, window.innerHeight - heightHelper, window.innerWidth, heightHelper);
+    overlay.drawRect(0, heightHelper, fullSize, fullSize);
+    overlay.drawRect(fullSize * 2, heightHelper, fullSize, fullSize);
+    overlay.endFill();
+
+    return overlay;
+};
+
 CanvasView.prototype.updateChangedSquares = function(changeList, size) {
 
     for (var i = 0; i < changeList.length; i++) {
@@ -62,13 +82,13 @@ CanvasView.prototype.updateChangedSquares = function(changeList, size) {
         var square = this.getSoundSquare(x, y);
 
         square.clear();
-        square.lineStyle(2, 0xFFFFFF, 1);
+        square.lineStyle(2, 0x000000, 1);
 
         if (value) {
-            square.beginFill(0xFFFF0B, 0.5);
+            square.beginFill(0xDADADA, 1);
             square.drawRect(0, 0, size, size);
         } else {
-            square.beginFill(0x00AA0B, 0.5);
+            square.beginFill(0x2A2A2A, 1);
             square.drawRect(0, 0, size, size);
         };
     }
@@ -94,47 +114,11 @@ CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
     soundSquare.x = xCoord;
     soundSquare.y = yCoord;
 
-    soundSquare.lineStyle(2, 0xFFFFFF, 1);
+    soundSquare.lineStyle(2, 0x000000, 1);
 
     var isInActive = (16 > i || i > 31 || 16 > j || j > 31);
 
     if (isInActive) {
-        soundSquare.alpha = 0.1;
-        // use the mousedown and touchstart
-        // soundSquare.mousedown = soundSquare.touchstart = function(data)
-        // {
-        //     // stop the default event...
-        //     data.originalEvent.preventDefault();
-
-        //     // store a reference to the data
-        //     // The reason for this is because of multitouch
-        //     // we want to track the movement of this particular touch
-        //     this.data = data;
-        //     this.alpha = 0.9;
-        //     this.dragging = true;
-        // };
-
-        // // set the events for when the mouse is released or a touch is released
-        // soundSquare.mouseup = soundSquare.mouseupoutside = soundSquare.touchend = soundSquare.touchendoutside = function(data)
-        // {
-        //     this.alpha = 1
-        //     this.dragging = false;
-        //     // set the interaction data to null
-        //     this.data = null;
-        // };
-
-        // // set the callbacks for when the mouse or a touch moves
-        // soundSquare.mousemove = soundSquare.touchmove = function(data)
-        // {
-        //     if(this.dragging)
-        //     {
-        //         var newPosition = this.data.getLocalPosition(this.parent);
-        //         this.position.x = newPosition.x;
-        //         this.position.y = newPosition.y;
-        //         console.log("new position" + newPosition.x);
-        //     }
-        // };
-
 
     } else {
         soundSquare.click = function(data) {
@@ -148,9 +132,9 @@ CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
 
 
     if (model.getCellLocal(i, j)) {
-        soundSquare.beginFill(0xFFFF0B, 0.5);
+        soundSquare.beginFill(0xDADADA, 1);
     } else {
-        soundSquare.beginFill(0x00AA0B, 0.5);
+        soundSquare.beginFill(0x2A2A2A, 1);
     }
 
     soundSquare.drawRect(0, 0, size, size);

@@ -1,4 +1,4 @@
-var CanvasView = function(container, model) {
+var CanvasView = function(containerDiv, model) {
 
     this.changeList = [];
     this.soundSquares = [];
@@ -6,6 +6,10 @@ var CanvasView = function(container, model) {
     // create an new instance of a pixi stage
     var stage = new PIXI.Stage(0x000000, true);
     var container = new PIXI.DisplayObjectContainer();
+    this.container = container;
+
+
+
     stage.setInteractive(true);
     var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, null);
 
@@ -18,14 +22,19 @@ var CanvasView = function(container, model) {
     // numbers for the squares/grid
     var numOfSquares = 48;
     var offsetY = (window.innerWidth - window.innerHeight) / 2;
+    container.position.y -= offsetY;
     var size = window.innerWidth / numOfSquares;
 
     this.populateCanvas(numOfSquares, size, container, model);
-    container.position.y = -offsetY;
+
     stage.addChild(container);
 
     // run the render loop
     requestAnimFrame(animate);
+
+    stage.setInteractive(true);
+    stage.hitArea = this._hitPolygonForContainer(size);
+    this.addDragNDropMouseListenersToElement(stage);
 
     var self = this;
 
@@ -99,42 +108,6 @@ CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
     var isInActive = (16 > i || i > 31 || 16 > j || j > 31);
 
     if (isInActive) {
-        soundSquare.alpha = 0.1;
-        // use the mousedown and touchstart
-        // soundSquare.mousedown = soundSquare.touchstart = function(data)
-        // {
-        //     // stop the default event...
-        //     data.originalEvent.preventDefault();
-
-        //     // store a reference to the data
-        //     // The reason for this is because of multitouch
-        //     // we want to track the movement of this particular touch
-        //     this.data = data;
-        //     this.alpha = 0.9;
-        //     this.dragging = true;
-        // };
-
-        // // set the events for when the mouse is released or a touch is released
-        // soundSquare.mouseup = soundSquare.mouseupoutside = soundSquare.touchend = soundSquare.touchendoutside = function(data)
-        // {
-        //     this.alpha = 1
-        //     this.dragging = false;
-        //     // set the interaction data to null
-        //     this.data = null;
-        // };
-
-        // // set the callbacks for when the mouse or a touch moves
-        // soundSquare.mousemove = soundSquare.touchmove = function(data)
-        // {
-        //     if(this.dragging)
-        //     {
-        //         var newPosition = this.data.getLocalPosition(this.parent);
-        //         this.position.x = newPosition.x;
-        //         this.position.y = newPosition.y;
-        //         console.log("new position" + newPosition.x);
-        //     }
-        // };
-
 
     } else {
         soundSquare.click = function(data) {
@@ -144,8 +117,7 @@ CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
             model.setCellLocal(i, j, newValue);
             model.notifyObservers();
         };
-    };
-
+    }
 
     if (model.getCellLocal(i, j)) {
         soundSquare.beginFill(0xFFFF0B, 0.5);
@@ -167,4 +139,89 @@ CanvasView.prototype.setSoundSquare = function(x, y, square) {
 
 CanvasView.prototype.getSoundSquare = function(x, y) {
     return this.soundSquares[y][x];
+};
+
+CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
+    // use the mousedown and touchstart
+    var lastMouseDown = {};
+    container = this.container;
+
+    element.mousedown = element.touchstart = function(data) {
+
+        // stop the default event...
+        data.originalEvent.preventDefault();
+
+        // store a reference to the data
+        // The reason for this is because of multitouch
+        // we want to track the movement of this particular touch
+        this.data = data;
+        this.alpha = 0.9;
+        this.dragging = true;
+        console.log("mouse down");
+        lastMouseDown = {
+            x: data.global.x,
+            y: data.global.y,
+        };
+    };
+
+    // set the events for when the mouse is released or a touch is released
+    element.mouseup = element.mouseupoutside = element.touchend = element.touchendoutside = function(data) {
+        this.alpha = 1;
+        this.dragging = false;
+        // set the interaction data to null
+        this.data = null;
+        console.log("mouse up");
+
+    };
+
+    // set the callbacks for when the mouse or a touch moves
+    element.mousemove = element.touchmove = function(data) {
+        if (this.dragging) {
+            console.log('oldPOS: ' + JSON.stringify(lastMouseDown, null, 4));
+            console.log('newPOS: ' + JSON.stringify(data.global, null, 4));
+            var newPosition = data.global;
+            var yOffset = newPosition.y - lastMouseDown.y;
+            var xOffset = newPosition.x - lastMouseDown.x;
+
+            container.position.x += xOffset;
+            container.position.y += yOffset;
+
+            console.log("XOFF: " + xOffset + " YOFF: " + yOffset);
+            lastMouseDown = {
+                x: newPosition.x,
+                y: newPosition.y,
+            };
+        }
+    };
+};
+
+CanvasView.prototype._hitPolygonForContainer = function(squareSize) {
+    var high = 31;
+    var low = 16;
+    var docWidth = window.innerWidth;
+    var docHeight = window.innerHeight;
+
+    var lowX = (docWidth - 16 * squareSize) / 2;
+    var highX = lowX + 16 * squareSize;
+
+    var lowY = (docHeight - 16 * squareSize) / 2;
+    var highY = lowY + 16 * squareSize;
+
+
+
+    var polygon = new PIXI.Polygon([
+        new PIXI.Point(0, 0),
+        new PIXI.Point(docWidth, 0),
+        new PIXI.Point(docWidth, docHeight),
+        new PIXI.Point(0, docHeight),
+        new PIXI.Point(0, 0),
+        new PIXI.Point(lowX, lowY),
+        new PIXI.Point(lowX, highY),
+        new PIXI.Point(highX, highY),
+        new PIXI.Point(highX, lowY),
+        new PIXI.Point(lowX, lowY),
+        new PIXI.Point(0, 0),
+    ]);
+
+    return polygon;
 };

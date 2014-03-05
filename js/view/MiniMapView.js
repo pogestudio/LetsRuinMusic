@@ -1,5 +1,5 @@
 var MiniMapView = function(container, model) {
-    
+
     this.changeList = [];
 
 
@@ -82,11 +82,11 @@ MiniMapView.prototype._createMiniMap = function(size, model) {
     miniMap.x = 0;
     miniMap.y = 0;
 
-    miniMap.lineStyle(2, 0xFFFFFF, 1);
+    //miniMap.lineStyle(2, 0xFFFFFF, 1);
 
     miniMap.beginFill(0x000000, 0.5);
 
-    miniMap.drawRect(0, 0, size, size);
+    //miniMap.drawRect(0, 0, size, size);
 
     //miniMap.hitArea = new PIXI.Rectangle(0, 0, size, size);
     //miniMap.setInteractive(true);
@@ -96,7 +96,7 @@ MiniMapView.prototype._createMiniMap = function(size, model) {
     return miniMap;
 };
 
-MiniMapView.prototype._drawIconsFromChangeList = function(changeList, amountOfSquares, squareSize, stage) {
+MiniMapView.prototype._drawIconsFromChangeList = function(changeList, squareSize) {
 
     for (var i = 0; i < changeList.length; i++) {
         var changeListEntry = changeList[i];
@@ -106,8 +106,42 @@ MiniMapView.prototype._drawIconsFromChangeList = function(changeList, amountOfSq
 
 MiniMapView.prototype._updateSquareAtPosition = function(x, y, value, size) {
     var square = this.miniMapSquares[y][x];
-    var percentageFade = value /4;
-    square.beginFill(0xFFFFFF, percentageFade);
+
+    var color = null;
+    switch (value) {
+        case 0:
+            {
+                color = 0x000000;
+                break;
+            }
+        case 1:
+            {
+                color = 0x7D7D7D;
+                break;
+            }
+        case 2:
+            {
+                color = 0xACACAC;
+                break;
+            }
+        case 3:
+            {
+                color = 0xD7D7D7;
+                break;
+            }
+        case 4:
+            {
+                color = 0xFFFFFF;
+                break;
+            }
+        default:
+            {
+                console.error('error error unhandled values in minimap ::::::OOO');
+                break;
+            }
+    }
+
+    square.beginFill(color, 1);
     square.drawRect(0, 0, size, size);
 };
 

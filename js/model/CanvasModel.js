@@ -10,9 +10,19 @@ var CanvasModel = function() {
     this.changeList = [];
     this.name = "Awesome client";
 
+    this.currentInstrument = null;
+
     //Params: Values per cell, width(cells), height(cell)
     this.minimapData = new MinimapData(2, 50, 50);
 };
+
+CanvasModel.prototype.setInstrNr = function(number){
+    this.currentInstrument = number;
+}
+
+CanvasModel.prototype.getInstrNr = function(){
+    return this.currentInstrument;
+}
 
 CanvasModel.prototype.addObserver = function(observer) {
     this.observers.push(observer);

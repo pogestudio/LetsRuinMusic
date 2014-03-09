@@ -3,6 +3,7 @@ var CanvasView = function(containerDiv, model) {
     this.changeList = [];
     this.soundSquares = [];
     this.model = model;
+    this.animateBuffer = [];
 
     // create an new instance of a pixi stage
     var stage = new PIXI.Stage(0x000000, true);
@@ -48,6 +49,15 @@ var CanvasView = function(containerDiv, model) {
         self.updateChangedSquares(self.changeList, size);
         self.changeList = [];
 
+        //animate the squares in animateBuffer
+        if (self.animateBuffer[0] != undefined) {
+
+            for (var i = 0; i < self.animateBuffer.length; i++) {
+                
+                self.animateActiveSoundSquare(self.animateBuffer[i]);
+            }
+        }
+
         renderer.render(stage);
         requestAnimFrame(animate);
     }
@@ -65,7 +75,33 @@ var CanvasView = function(containerDiv, model) {
         this.changeList = model.changeList;
         console.error('this is called on move, but it doesnt initiate redraw at all. FIX!');
     };
+
+    //This function gets called when sound is played
+    this.onPlaySound = function(x, y) {
+
+        var square = this.getSoundSquare(x, y);
+        square.alpha = 0;
+
+        //add played square to animationBuffer
+        this.animateBuffer.push(square);
+    };
 };
+
+CanvasView.prototype.animateActiveSoundSquare = function(square) {
+
+    if (square.alpha < 1) {
+
+        square.alpha += 0.05;
+
+    } else {
+
+        //remove the square from animateBuffer
+        square.alpha = 1;
+        var indexofAnimateBuffer = this.animateBuffer.indexOf(square);
+        this.animateBuffer.splice(indexofAnimateBuffer, 1);
+    }
+
+}
 
 CanvasView.prototype.buildOverlay = function(size) {
 
@@ -101,6 +137,7 @@ CanvasView.prototype.updateChangedSquares = function(changeList, size) {
             square.drawRect(0, 0, size, size);
         } else {
             square.beginFill(0x2A2A2A, 1);
+            this.animateActiveSoundSquare(square);
             square.drawRect(0, 0, size, size);
         };
     }
@@ -173,8 +210,8 @@ CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
 
     var container = this.container;
     var containerOrigPos = {
-        x : container.position.x,
-        y : container.position.y,
+        x: container.position.x,
+        y: container.position.y,
     };
 
     element.mousedown = element.touchstart = function(data) {
@@ -212,7 +249,7 @@ CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
             var amountOfSquaresY = ~~ (yDistance / squareSize);
 
             //set the new position
-            model.setTopLeftOffset(xDistance,yDistance);
+            model.setTopLeftOffset(xDistance, yDistance);
             model.notifyObservers();
             //call redraw
             container.x = containerOrigPos.x;

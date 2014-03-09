@@ -9,6 +9,25 @@ var AudioViewController = function(model, audioModel){
     this.loadInstrument();
     this.xpos = 0;
     this.duration = 300;
+
+    this.observers = [];
+}
+
+AudioViewController.prototype.addObserver = function(observer){
+    this.observers.push(observer);
+}
+
+AudioViewController.prototype.notifyObservers = function(){
+    for(var i = 0; i < this.observers.length; i++){
+	// assumes that canvasView will do some animations on onPlaySound() method
+	try{
+	   this.observers[i].animate();
+	}
+	catch(err)
+	{
+	   console.log("AudioViewController: There is no reachable animate method in CanvasView");
+	}
+    }
 }
 
 AudioViewController.prototype.loadInstrument = function () {
@@ -41,6 +60,8 @@ AudioViewController.prototype.updateSoundY = function ()
 	if(dbint != 0 && dbint <= Object.keys(this.instruments).length){
 	    var note = this.tones[(32-i) % this.tones.length];
 	    var instr = this.instruments[dbint];
+	    // onPlaySound
+	    this.notifyObservers();
 	    this.playToneInstr(note,127,0,instr);
 	}
     }

@@ -20,7 +20,13 @@ AudioViewController.prototype.addObserver = function(observer){
 AudioViewController.prototype.notifyObservers = function(){
     for(var i = 0; i < this.observers.length; i++){
 	// assumes that canvasView will do some animations on onPlaySound() method
-	this.observers[i].onPlaySound();
+	try{
+	   this.observers[i].animate();
+	}
+	catch(err)
+	{
+	   console.log("AudioViewController: There is no reachable animate method in CanvasView");
+	}
     }
 }
 

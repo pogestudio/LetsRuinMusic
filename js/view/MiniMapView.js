@@ -167,7 +167,6 @@ MiniMapView.prototype._createMiniMapSquare = function(x, y, size) {
 
     miniMapSquare.x = xCoord;
     miniMapSquare.y = yCoord;
-
     miniMapSquare.beginFill(0x000000, 1);
     miniMapSquare.drawRect(0, 0, size, size);
     //miniMapSquare.hitArea = new PIXI.Rectangle(0, 0, size, size);

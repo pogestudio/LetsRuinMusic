@@ -1,11 +1,16 @@
-var CanvasView = function(container, model) {
+var CanvasView = function(containerDiv, model) {
 
     this.changeList = [];
     this.soundSquares = [];
+    this.model = model;
 
     // create an new instance of a pixi stage
     var stage = new PIXI.Stage(0x000000, true);
     var container = new PIXI.DisplayObjectContainer();
+    this.container = container;
+
+
+
     stage.setInteractive(true);
     var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, null);
 
@@ -18,10 +23,12 @@ var CanvasView = function(container, model) {
     // numbers for the squares/grid
     var numOfSquares = 48;
     var offsetY = (window.innerWidth - window.innerHeight) / 2;
+    container.position.y -= offsetY;
     var size = window.innerWidth / numOfSquares;
+    this.squareSize = size;
 
     this.populateCanvas(numOfSquares, size, container, model);
-    container.position.y = -offsetY;
+
     stage.addChild(container);
 
     // overlay
@@ -30,6 +37,10 @@ var CanvasView = function(container, model) {
 
     // run the render loop
     requestAnimFrame(animate);
+
+    stage.setInteractive(true);
+    stage.hitArea = this._hitPolygonForContainer(size);
+    this.addDragNDropMouseListenersToElement(stage);
 
     var self = this;
 
@@ -52,6 +63,7 @@ var CanvasView = function(container, model) {
     //This function gets called when there is a change at the model
     this.update = function(arg) {
         this.changeList = model.changeList;
+        console.error('this is called on move, but it doesnt initiate redraw at all. FIX!');
     };
 };
 
@@ -128,8 +140,7 @@ CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
             model.setCellLocal(i, j, newValue);
             model.notifyObservers();
         };
-    };
-
+    }
 
     if (model.getCellLocal(i, j)) {
         soundSquare.beginFill(0xDADADA, 1);
@@ -151,4 +162,119 @@ CanvasView.prototype.setSoundSquare = function(x, y, square) {
 
 CanvasView.prototype.getSoundSquare = function(x, y) {
     return this.soundSquares[y][x];
+};
+
+CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
+    // use the mousedown and touchstart
+    var firstMouseDown = {};
+    var lastMouseDown = {};
+    var squareSize = this.squareSize;
+    var model = this.model;
+
+    var container = this.container;
+    var containerOrigPos = {
+        x : container.position.x,
+        y : container.position.y,
+    };
+
+    element.mousedown = element.touchstart = function(data) {
+
+        // stop the default event...
+        data.originalEvent.preventDefault();
+
+        // store a reference to the data
+        // The reason for this is because of multitouch
+        // we want to track the movement of this particular touch
+        this.data = data;
+        this.alpha = 0.9;
+        this.dragging = true;
+        // console.log("mouse down");
+        lastMouseDown = {
+            x: data.global.x,
+            y: data.global.y,
+        };
+        firstMouseDown = {
+            x: data.global.x,
+            y: data.global.y,
+        };
+    };
+
+    // set the events for when the mouse is released or a touch is released
+    element.mouseup = element.mouseupoutside = element.touchend = element.touchendoutside = function(data) {
+        this.alpha = 1;
+        if (this.dragging === true) {
+            console.log('SET NEW POSITION AND REDRAW EVERYTHING!!!!');
+
+            //calculate how far we went
+            var xDistance = lastMouseDown.x - firstMouseDown.x;
+            var yDistance = lastMouseDown.y - firstMouseDown.y;
+            var amountOfSquaresX = ~~ (xDistance / squareSize);
+            var amountOfSquaresY = ~~ (yDistance / squareSize);
+
+            //set the new position
+            model.setTopLeftOffset(xDistance,yDistance);
+            model.notifyObservers();
+            //call redraw
+            container.x = containerOrigPos.x;
+            container.y = containerOrigPos.y;
+
+
+        }
+        this.dragging = false;
+        // set the interaction data to null
+        this.data = null;
+        // console.log("mouse up");
+
+    };
+
+    // set the callbacks for when the mouse or a touch moves
+    element.mousemove = element.touchmove = function(data) {
+        if (this.dragging) {
+            // console.log('oldPOS: ' + JSON.stringify(lastMouseDown, null, 4));
+            // console.log('newPOS: ' + JSON.stringify(data.global, null, 4));
+            var newPosition = data.global;
+            var yOffset = newPosition.y - lastMouseDown.y;
+            var xOffset = newPosition.x - lastMouseDown.x;
+
+            container.position.x += xOffset;
+            container.position.y += yOffset;
+
+            //console.log("XOFF: " + xOffset + " YOFF: " + yOffset);
+            lastMouseDown = {
+                x: newPosition.x,
+                y: newPosition.y,
+            };
+        }
+    };
+};
+
+CanvasView.prototype._hitPolygonForContainer = function(squareSize) {
+    var high = 31;
+    var low = 16;
+    var docWidth = window.innerWidth;
+    var docHeight = window.innerHeight;
+
+    var lowX = (docWidth - 16 * squareSize) / 2;
+    var highX = lowX + 16 * squareSize;
+
+    var lowY = (docHeight - 16 * squareSize) / 2;
+    var highY = lowY + 16 * squareSize;
+
+
+
+    var polygon = new PIXI.Polygon([
+        new PIXI.Point(0, 0),
+        new PIXI.Point(docWidth, 0),
+        new PIXI.Point(docWidth, docHeight),
+        new PIXI.Point(0, docHeight),
+        new PIXI.Point(0, 0),
+        new PIXI.Point(lowX, lowY),
+        new PIXI.Point(lowX, highY),
+        new PIXI.Point(highX, highY),
+        new PIXI.Point(highX, lowY),
+        new PIXI.Point(lowX, lowY),
+        new PIXI.Point(0, 0),
+    ]);
+
+    return polygon;
 };

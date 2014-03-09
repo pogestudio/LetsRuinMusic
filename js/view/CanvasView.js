@@ -53,7 +53,7 @@ var CanvasView = function(containerDiv, model) {
         if (self.animateBuffer[0] != undefined) {
 
             for (var i = 0; i < self.animateBuffer.length; i++) {
-                
+
                 self.animateActiveSoundSquare(self.animateBuffer[i]);
             }
         }
@@ -173,7 +173,17 @@ CanvasView.prototype.createSoundSquare = function(i, j, size, model) {
         soundSquare.click = function(data) {
             console.log('got click!! from X: ' + i + " from Y: " + j);
             var currentValue = model.getCellLocal(i, j);
-            var newValue = 1 - currentValue;
+            var newValue;
+            var instrumentNumber = model.getInstrNr();
+
+            if(currentValue === instrumentNumber)
+            {
+                newValue = 0;
+            }
+            else {
+                newValue = instrumentNumber;
+            }
+            
             model.setCellLocal(i, j, newValue);
             model.notifyObservers();
         };

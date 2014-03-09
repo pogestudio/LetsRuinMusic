@@ -44,6 +44,7 @@ $(function() {
     var canvasViewController = new CanvasViewController(canvasView, model);
 	
     var audioViewController = new AudioViewController(model, audioModel);
+    audioViewController.addObserver(canvasView);
 
     //And create the needed controllers and views
     var miniMapView = new MiniMapView($("#miniMapView"), model);

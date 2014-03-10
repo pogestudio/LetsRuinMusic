@@ -16,11 +16,11 @@ var CanvasModel = function() {
     this.minimapData = new MinimapData(2, 50, 50);
 };
 
-CanvasModel.prototype.setInstrNr = function(number){
+CanvasModel.prototype.setInstrNr = function(number) {
     this.currentInstrument = number;
 }
 
-CanvasModel.prototype.getInstrNr = function(){
+CanvasModel.prototype.getInstrNr = function() {
     return this.currentInstrument;
 }
 
@@ -84,13 +84,13 @@ CanvasModel.prototype.setCell = function(x, y, value) {
         xlist = {};
         this.data[y] = xlist;
     }
-    
+
     this.changeList.push({
         x: x,
         y: y,
         value: value,
         prev: xlist[x] || 0
-        });
+    });
 
     xlist[x] = value;
 
@@ -98,14 +98,40 @@ CanvasModel.prototype.setCell = function(x, y, value) {
 
 //Global coordinates 
 CanvasModel.prototype.setTopLeft = function(x, y) {
+    //whenever we set the cell, we have to redraw _all_ squares in local space
+
     this.x = x;
     this.y = y;
+
+    this._addAllLocalCellsToChangeList();
 };
 
 CanvasModel.prototype.setTopLeftOffset = function(xOff, yOff) {
-    this.x += xOff;
-    this.y += yOff;
+    this.setTopLeft(this.x + xOff, this.y + yOff);
 };
+
+
+CanvasModel.prototype._addAllLocalCellsToChangeList = function() {
+
+    var globX = 0;
+    var globY = 0;
+    var cellValue = 0;
+    for (var i = 0; i < this.width; i++) {
+        globX = this.x + i;
+        for (var j = 0; j < this.height; j++) {
+            globY = this.y + j;
+            cellValue = this.getCell(globX, globY);
+            this.changeList.push({
+                x: globX,
+                y: globY,
+                value: cellValue,
+                prev: 0
+            });
+        }
+    }
+};
+
+
 
 CanvasModel.prototype.setSize = function(width, height) {
     this.width = width;

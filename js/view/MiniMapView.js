@@ -1,20 +1,14 @@
-var MiniMapView = function(container, model) {
+var MiniMapView = function(container, model,rendererContainer) {
 
     this.changeList = [];
 
 
 
     // create an new instance of a pixi stage
-    var stage = new PIXI.Stage(0x000000, true);
+    var stage = rendererContainer.stage;
     stage.setInteractive(true);
     var miniMapSize = 200;
     var renderer = PIXI.autoDetectRenderer(miniMapSize, miniMapSize, null);
-
-    // add the renderer view element to the DOM
-    document.body.appendChild(renderer.view);
-    renderer.view.style.position = "absolute";
-    renderer.view.style.top = "0px";
-    renderer.view.style.left = "0px";
 
     // var graphics = new PIXI.Graphics();
 
@@ -25,46 +19,20 @@ var MiniMapView = function(container, model) {
     var squareSize = size / amountOfSquares;
     // var miniMap = createMiniMap(size, model);
     // stage.addChild(miniMap);
+    this.amountOfSquares = amountOfSquares;
+    this.squareSize = squareSize;
 
-
-    // run the render loop
-    requestAnimFrame(animate);
 
     var miniMap = this._createMiniMap(size, model);
     stage.addChild(miniMap);
 
     this.miniMapSquares = this._populateSquaresWithReference(amountOfSquares, amountOfSquares, squareSize, stage);
 
-
-    var getChangeList = function() {
-        // var changeList = [];
-        // changeList.push({
-        //     x: Math.floor(Math.random() * amountOfSquares),
-        //     y: Math.floor(Math.random() * amountOfSquares),
-        //     value: Math.random() > 0.5 ? 0 : 1,
-        // });
-        // changeList.push({
-        //     x: Math.floor(Math.random() * amountOfSquares),
-        //     y: Math.floor(Math.random() * amountOfSquares),
-        //     value: Math.random() > 0.5 ? 0 : 1,
-        // });
-        // return changeList;
-    };
-
-    var self = this;
-
-    function animate() {
-        //var listOfUpdatedIcons = getChangeList();
-        self._drawIconsFromChangeList(self.changeList, amountOfSquares, squareSize, stage);
-        renderer.render(stage);
-        requestAnimFrame(animate);
-        self.changeList = [];
-    }
-
-
     /*****************************************  
           Observer implementation    
     *****************************************/
+
+    rendererContainer.addFrameListener(this);
 
     //Register an observer to the OLD MODEL
     model.addObserver(this);
@@ -76,7 +44,13 @@ var MiniMapView = function(container, model) {
     };
 };
 
-MiniMapView.prototype._createMiniMap = function(size, model) {
+MiniMapView.prototype.onFrameRender = function (rendererContainer) {
+    this._drawIconsFromChangeList(this.changeList, this.amountOfSquares, this.squareSize, rendererContainer.stage);
+    this.changeList = [];
+}
+
+
+MiniMapView.prototype._createMiniMap = function (size, model) {
     var miniMap = new PIXI.Graphics();
 
     miniMap.x = 0;

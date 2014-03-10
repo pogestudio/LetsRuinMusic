@@ -1,4 +1,4 @@
-var CanvasView = function(containerDiv, model) {
+var CanvasView = function(containerDiv, model, rendererContainer) {
 
     this.changeList = [];
     this.soundSquares = [];
@@ -6,26 +6,21 @@ var CanvasView = function(containerDiv, model) {
     this.animateBuffer = [];
 
     // create an new instance of a pixi stage
-    var stage = new PIXI.Stage(0x000000, true);
+    var stage = rendererContainer.stage;
     var container = new PIXI.DisplayObjectContainer();
     this.container = container;
 
 
 
     stage.setInteractive(true);
-    var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, null);
 
-    // add the renderer view element to the DOM
-    document.body.appendChild(renderer.view);
-    renderer.view.style.position = "relative";
-    renderer.view.style.top = "0px";
-    renderer.view.style.left = "0px";
 
     // numbers for the squares/grid
     var numOfSquares = 48;
     var offsetY = (window.innerWidth - window.innerHeight) / 2;
     container.position.y -= offsetY;
     var size = window.innerWidth / numOfSquares;
+    this.size = size;
     this.squareSize = size;
 
     this.populateCanvas(numOfSquares, size, container, model);
@@ -37,7 +32,7 @@ var CanvasView = function(containerDiv, model) {
     stage.addChild(overlay);
 
     // run the render loop
-    requestAnimFrame(animate);
+    //requestAnimFrame(animate);
 
     stage.setInteractive(true);
     stage.hitArea = this._hitPolygonForContainer(size);
@@ -45,7 +40,8 @@ var CanvasView = function(containerDiv, model) {
 
     var self = this;
 
-    function animate() {
+   /* function animate() {
+        rendererContainer.stats.begin();
         self.updateChangedSquares(self.changeList, size);
         self.changeList = [];
 
@@ -56,10 +52,11 @@ var CanvasView = function(containerDiv, model) {
             }
         }
 
-        renderer.render(stage);
+        rendererContainer.renderer.render(stage);
         requestAnimFrame(animate);
-    }
-
+        rendererContainer.stats.end();
+    }*/
+    rendererContainer.addFrameListener(this);
 
     /*****************************************  
           Observer implementation    
@@ -84,6 +81,18 @@ var CanvasView = function(containerDiv, model) {
         this.animateBuffer.push(square);
     };
 };
+
+CanvasView.prototype.onFrameRender = function (renderer) {
+    this.updateChangedSquares(this.changeList, this.size);
+    this.changeList = [];
+
+    //animate the squares in animateBuffer
+    if (this.animateBuffer[0] !== undefined) {
+        for (var i = 0; i < this.animateBuffer.length; i++) {
+            this.animateActiveSoundSquare(this.animateBuffer[i]);
+        }
+    }
+}
 
 CanvasView.prototype.animateActiveSoundSquare = function(square) {
     if (square.alpha < 1) {

@@ -41,16 +41,17 @@ $(function() {
 
     var rendererContainer = new Renderer();
 
-    //And create the needed controllers and views
-    var canvasView = new CanvasView($("#canvasView"), model, rendererContainer);
-    var canvasViewController = new CanvasViewController(canvasView, model);
-	
     var audioViewController = new AudioViewController(model, audioModel);
-    audioViewController.addObserver(canvasView);
 
     //And create the needed controllers and views
-    var miniMapView = new MiniMapView($("#miniMapView"), model, rendererContainer);
-    var miniMapViewController = new MiniMapViewController(miniMapView, model);
+    var canvasView = new CanvasView($("#canvasView"), model, rendererContainer, audioViewController);
+    var canvasViewController = new CanvasViewController(canvasView, model);
+	
+    //audioViewController.addObserver(canvasView);
+
+    //And create the needed controllers and views
+    //var miniMapView = new MiniMapView($("#miniMapView"), model, rendererContainer);
+    //var miniMapViewController = new MiniMapViewController(miniMapView, model);
 
     var toolbarView = new ToolbarView($("#toolbarView"), audioModel, model);
     var toolbarViewController = new ToolbarViewController(toolbarView, audioModel,model);

@@ -34,7 +34,7 @@
         self.stats.begin();
 
         self.frameListeners.forEach(function (listener) {
-            listener.onFrameRender(self);
+            listener.onFrameRender(self, 0.0166); //TODO: add real timestep
         });
 
         self.renderer.render(self.stage);

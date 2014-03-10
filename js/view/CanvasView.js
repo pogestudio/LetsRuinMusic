@@ -66,10 +66,10 @@ var CanvasView = function(containerDiv, model, rendererContainer) {
     model.addObserver(this);
 
     //This function gets called when there is a change at the model
-    this.update = function(arg) {
+    /*this.update = function(arg) {
         this.changeList = model.changeList;
         console.log('this is called on move, but it doesnt initiate redraw at all. FIX!');
-    };
+    };*/
 
     //This function gets called when sound is played
     this.onPlaySound = function(x, y) {
@@ -82,6 +82,17 @@ var CanvasView = function(containerDiv, model, rendererContainer) {
     };
 };
 
+
+//Model change notification
+CanvasView.prototype.update = function (model) {
+    model.changeList.forEach(function (cell) {
+        //Check if cell exists
+        //If not create
+        //Else update
+    });
+}
+
+
 CanvasView.prototype.onFrameRender = function (renderer) {
     this.updateChangedSquares(this.changeList, this.size);
     this.changeList = [];
@@ -90,6 +101,9 @@ CanvasView.prototype.onFrameRender = function (renderer) {
     if (this.animateBuffer[0] !== undefined) {
         for (var i = 0; i < this.animateBuffer.length; i++) {
             this.animateActiveSoundSquare(this.animateBuffer[i]);
+         //   cell.updateAnim(dt)
+        //    if(cell.isDone())
+         //       remove formanimstack
         }
     }
 }

@@ -50,10 +50,8 @@ var CanvasView = function(containerDiv, model) {
         self.changeList = [];
 
         //animate the squares in animateBuffer
-        if (self.animateBuffer[0] != undefined) {
-
+        if (self.animateBuffer[0] !== undefined) {
             for (var i = 0; i < self.animateBuffer.length; i++) {
-
                 self.animateActiveSoundSquare(self.animateBuffer[i]);
             }
         }
@@ -88,20 +86,15 @@ var CanvasView = function(containerDiv, model) {
 };
 
 CanvasView.prototype.animateActiveSoundSquare = function(square) {
-
     if (square.alpha < 1) {
-
         square.alpha += 0.05;
-
     } else {
-
         //remove the square from animateBuffer
         square.alpha = 1;
         var indexofAnimateBuffer = this.animateBuffer.indexOf(square);
         this.animateBuffer.splice(indexofAnimateBuffer, 1);
     }
-
-}
+};
 
 CanvasView.prototype.buildOverlay = function(size) {
 
@@ -255,11 +248,14 @@ CanvasView.prototype.addDragNDropMouseListenersToElement = function(element) {
             //calculate how far we went
             var xDistance = lastMouseDown.x - firstMouseDown.x;
             var yDistance = lastMouseDown.y - firstMouseDown.y;
-            var amountOfSquaresX = ~~ (xDistance / squareSize);
-            var amountOfSquaresY = ~~ (yDistance / squareSize);
+            var amountOfSquaresX = ~~ ((xDistance + squareSize * 0.5) / squareSize);
+            var amountOfSquaresY = ~~ ((yDistance + squareSize * 0.5) / squareSize);
+
+            var offSetX = -amountOfSquaresX; //negate, since if we move canvas up we want to go down and vice versa.
+            var offSetY = -amountOfSquaresY;
 
             //set the new position
-            model.setTopLeftOffset(xDistance, yDistance);
+            model.setTopLeftOffset(offSetX, offSetY);
             model.notifyObservers();
             //call redraw
             container.x = containerOrigPos.x;

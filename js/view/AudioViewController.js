@@ -11,23 +11,19 @@ var AudioViewController = function(model, audioModel) {
     this.duration = 300;
 
     this.observers = [];
-};
+}
 
 AudioViewController.prototype.addObserver = function(observer) {
     this.observers.push(observer);
-};
+}
 
-AudioViewController.prototype.notifyObservers = function() {
+
+AudioViewController.prototype.notifyObservers = function(x, y) {
     for (var i = 0; i < this.observers.length; i++) {
-        this.observers[i].onPlaySound(x, y);
         // assumes that canvasView will do some animations on onPlaySound() method
-        try {
-            this.observers[i].animate();
-        } catch (err) {
-            console.log("AudioViewController: There is no reachable animate method in CanvasView");
-        }
+        this.observers[i].onPlaySound(x, y);
     }
-};
+}
 
 AudioViewController.prototype.loadInstrument = function() {
     var avc = this;

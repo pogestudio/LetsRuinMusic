@@ -1,10 +1,13 @@
-﻿var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer) {
+﻿var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
     this.cellFactory = cellFactory;
     this.spriteBatchContainer = pixiSpriteBatchContainer;
-
+    this.isForMiniMap = isForMiniMap;
 
     model.addObserver(this);
-    audioViewController.addObserver(this);
+    if (!isForMiniMap) {
+        audioViewController.addObserver(this);
+    }
+
 
     //Some nice data structure for cells
     this.data = {};
@@ -13,10 +16,18 @@
 CellContainer.prototype.update = function(model) {
     //get changelist
     //loop through it and set all cells
-    var changeList = model.changeList;
+
+    var changeList = null;
+
+    if (this.isForMiniMap) {
+        changeList = model.minimapData.changeList;
+    } else {
+        changeList = model.changeList;
+    }
+
     var self = this;
     changeList.forEach(function(entry) {
-        self.setCell(entry.x,entry.y,entry.value);
+        self.setCell(entry.x, entry.y, entry.value);
     });
 };
 
@@ -74,10 +85,10 @@ CellContainer.prototype.getGlobalPosFromScreenPos = function(screenX, screenY) {
     var result = {
         x: Math.floor((screenX - this.spriteBatchContainer.position.x) / cellSize),
         y: Math.floor((screenY - this.spriteBatchContainer.position.y) / cellSize)
-    }
+    };
 
     return result;
-}
+};
 
 CellContainer.prototype.onPlaySound = function(x, y) {
     //for each cell at x, y

@@ -1,5 +1,5 @@
 var CanvasView = function(containerDiv, model, rendererContainer, audioViewController) {
-
+    this.model = model;
     this.stage = rendererContainer.stage;
 
     //Factory needs parameters
@@ -21,18 +21,26 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     var pixiSpriteBatchContainer = new PIXI.SpriteBatch();
     rendererContainer.stage.addChild(pixiSpriteBatchContainer);
     this.cellContainer = new CellContainer(this.cellFactory, model, audioViewController, pixiSpriteBatchContainer);
-
     model.addObserver(this);
-
 
     //Overlay
 
 
     //Mouse listeners
-    rendererContainer.stage.mousedown = rendererContainer.stage.touchstart = this.onMouseDown;
-    rendererContainer.stage.mousemove = rendererContainer.stage.touchmove = this.onMouseMove;
+    var self = this;
+    rendererContainer.stage.mousedown = rendererContainer.stage.touchstart = function (data) {
+        self.onMouseDown(data);
+    };
+    rendererContainer.stage.mousemove = rendererContainer.stage.touchmove = function (data) {
+        self.onMouseMove(data);
+    };
     rendererContainer.stage.mouseup = rendererContainer.stage.mouseupoutside =
-        rendererContainer.stage.touchend = rendererContainer.stage.touchendoutside = this.onMouseUp;
+    rendererContainer.stage.touchend = rendererContainer.stage.touchendoutside = function (data) {
+        self.onMouseUp(data);
+    };
+
+    this.mouseDrag = new MouseDrag();
+    this.mouseDrag.addListener(this);
 };
 
 CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
@@ -45,6 +53,20 @@ CanvasView.prototype.update = function(model) {
 };
 
 CanvasView.prototype.onMouseDown = function(data) {
+    var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
+
+    var cellValue = this.model.getCell(globalPos.x, globalPos.y);
+    console.log(cellValue);
+    if (cellValue != 0) {
+        this.model.setCell(globalPos.x, globalPos.y, 0);
+    }
+    else {
+        this.model.setCell(globalPos.x, globalPos.y, 1);
+    }
+
+    this.model.notifyObservers();
+
+    console.log(globalPos.x + "    " + data.global.x);
     //if in the middle
     //  get pos from screen
     //  get/set cell
@@ -55,8 +77,19 @@ CanvasView.prototype.onMouseDown = function(data) {
 
 CanvasView.prototype.onMouseMove = function(data) {
     //drag canvas
-};
+
+}
 
 CanvasView.prototype.onMouseUp = function(data) {
     //stop drag canvas magic
-};
+}
+
+CanvasView.prototype.onDragStart = function (point) {
+    //drag canvas magic
+}
+CanvasView.prototype.onDragMove = function (point, move) {
+    //drag canvas magic
+}
+CanvasView.prototype.onDragStop = function (point, move) {
+    //drag canvas magic
+}

@@ -40,7 +40,6 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
         if (xlist === undefined) {
             xlist = {};
             this.data[globalY] = xlist;
-            console.log(this.data);
         }
         xlist[globalX] = cell;
     }
@@ -53,7 +52,6 @@ CellContainer.prototype.getCell = function(globalX, globalY) {
     if (xlist === undefined)
         return 0;
 
-    console.log(this.data);
     return xlist[globalX] || 0;
 
 };
@@ -71,8 +69,15 @@ CellContainer.prototype.deleteCell = function(globalX, globalY) {
 };
 
 CellContainer.prototype.getGlobalPosFromScreenPos = function(screenX, screenY) {
+    var cellSize = this.cellFactory.cellSize;
 
-};
+    var result = {
+        x: Math.floor((screenX - this.spriteBatchContainer.position.x) / cellSize),
+        y: Math.floor((screenY - this.spriteBatchContainer.position.y) / cellSize)
+    }
+
+    return result;
+}
 
 CellContainer.prototype.onPlaySound = function(x, y) {
     //for each cell at x, y

@@ -3,9 +3,9 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.stage = rendererContainer.stage;
 
     //Factory needs parameters
-    var cellSize = 32;
+    this.cellSize = 32;
     var borderSize = 1;
-    this.cellFactory = new CellFactory(cellSize, borderSize);
+    this.cellFactory = new CellFactory(this.cellSize, borderSize);
 
     //Background
     this.background = new Background();
@@ -21,7 +21,7 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     rendererContainer.addFrameListener(this);
 
     //Overlay
-    this.overlayContainer = new Overlay(cellSize);
+    this.overlayContainer = new Overlay(this.cellSize);
     this.stage.addChild(this.overlayContainer.overlay);
 
 
@@ -97,5 +97,20 @@ CanvasView.prototype.onDragMove = function (point, move) {
 }
 
 CanvasView.prototype.onDragStop = function (point, move) {
-   //TODO: Snap to overlay
+    //TODO: Snap to overlay
+    var diffX = (this.cellContainer.spriteBatchContainer.position.x - this.overlayContainer.x) % this.cellSize;
+    var diffY = (this.cellContainer.spriteBatchContainer.position.y - this.overlayContainer.y) % this.cellSize;
+    
+    this.cellContainer.spriteBatchContainer.position.x -= diffX;
+    this.cellContainer.spriteBatchContainer.position.y -= diffY;
+
+    this.background.tilingSprite.tilePosition.x -= diffX;
+    this.background.tilingSprite.tilePosition.y -= diffY;
+
+    var globalPos = this.cellContainer.getGlobalPosFromScreenPos(
+        this.overlayContainer.x,
+        this.overlayContainer.y);
+
+    this.model.x = globalPos.x;
+    this.model.y = globalPos.y;
 }

@@ -54,7 +54,7 @@ AudioViewController.prototype.updateSoundY = function() {
     for (var i = y; i < y + 16; i++) {
         var dbint = this.model.getCell(x + this.xpos, i);
         if (dbint != 0 && dbint <= Object.keys(this.instruments).length) {
-            var note = this.tones[(32 - i) % this.tones.length];
+            var note = this.tones[(y + 16 - i) % this.tones.length];
             var instr = this.instruments[dbint];
             // onPlaySound
             this.notifyObservers(x + this.xpos, i);

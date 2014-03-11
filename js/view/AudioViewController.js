@@ -46,10 +46,12 @@ AudioViewController.prototype.updateSound = function() {
 }
 
 AudioViewController.prototype.updateSoundY = function() {
-    var x = 16;
-    var y = 16;
+    //get the new X
+    //get the new Y
+    var x = this.model.x;
+    var y = this.model.y;
 
-    for (var i = y; i < 32; i++) {
+    for (var i = y; i < y + 16; i++) {
         var dbint = this.model.getCellLocal(x + this.xpos, i);
         if (dbint != 0 && dbint <= Object.keys(this.instruments).length) {
             var note = this.tones[(32 - i) % this.tones.length];

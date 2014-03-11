@@ -7,17 +7,18 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     var borderSize = 1;
     this.cellFactory = new CellFactory(cellSize, borderSize);
 
-
     //Background
     this.background = new Background();
     this.stage.addChild(this.background.tilingSprite);
 
-
-
     var pixiSpriteBatchContainer = new PIXI.SpriteBatch();
     rendererContainer.stage.addChild(pixiSpriteBatchContainer);
-    this.cellContainer = new CellContainer(this.cellFactory, model, audioViewController, pixiSpriteBatchContainer);
+    var isMiniMapView = false;
+    this.cellContainer = new CellContainer(this.cellFactory, model, audioViewController, pixiSpriteBatchContainer, isMiniMapView);
     model.addObserver(this);
+
+    //add listener for animation
+    rendererContainer.addFrameListener(this);
 
     //Overlay
 

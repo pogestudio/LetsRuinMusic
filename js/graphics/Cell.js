@@ -1,5 +1,5 @@
 ﻿
-var Cell = function (container, textures, globalX, globalY, cellSize, borderSize) {
+var Cell = function (container, globalX, globalY, cellSize, borderSize) {
 
     this.x = globalX;
     this.y = globalY;

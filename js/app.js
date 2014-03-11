@@ -49,7 +49,7 @@ $(function() {
     //audioViewController.addObserver(canvasView);
 
     //And create the needed controllers and views
-    //var miniMapView = new MiniMapView($("#miniMapView"), model, rendererContainer);
+    var miniMapView = new MiniMapView(model, rendererContainer);
     //var miniMapViewController = new MiniMapViewController(miniMapView, model);
 
     var toolbarView = new ToolbarView($("#toolbarView"), audioModel, model);

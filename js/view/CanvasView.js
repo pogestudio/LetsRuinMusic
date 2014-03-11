@@ -8,6 +8,10 @@ var CanvasView = function (containerDiv, model, rendererContainer, audioViewCont
 
     model.addObserver(this);
 
+    //Background
+    this.background = new Background();
+    this.stage.addChild(this.background.tilingSprite);
+
     //Overlay
 
 

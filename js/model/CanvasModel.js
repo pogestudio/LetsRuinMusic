@@ -68,7 +68,7 @@ CanvasModel.prototype.getCell = function(x, y) {
     if (xlist === undefined)
         return 0;
 
-    return xlist[x] | 0;
+    return xlist[x] || 0;
 };
 
 //Local coordinates: (0-width, 0-height)

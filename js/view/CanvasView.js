@@ -1,5 +1,5 @@
 var CanvasView = function(containerDiv, model, rendererContainer, audioViewController) {
-
+    this.model = model;
     this.stage = rendererContainer.stage;
 
     //Factory needs parameters
@@ -50,6 +50,17 @@ CanvasView.prototype.update = function(model) {
 
 CanvasView.prototype.onMouseDown = function(data) {
     var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
+
+    var cellValue = this.model.getCell(globalPos.x, globalPos.y);
+    console.log(cellValue);
+    if (cellValue != 0) {
+        this.model.setCell(globalPos.x, globalPos.y, 0);
+    }
+    else {
+        this.model.setCell(globalPos.x, globalPos.y, 1);
+    }
+
+    this.model.notifyObservers();
 
     console.log(globalPos.x + "    " + data.global.x);
     //if in the middle

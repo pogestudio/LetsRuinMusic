@@ -54,19 +54,21 @@ CanvasView.prototype.update = function(model) {
 /////Mouse listeners/////
 
 CanvasView.prototype.onMouseDown = function (data) {
-    //TODO: if (in middle do this)
-    var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
-    var cellValue = this.model.getCell(globalPos.x, globalPos.y);
-    if (cellValue != 0) {
-        this.model.setCell(globalPos.x, globalPos.y, 0);
+  
+    if (this.overlayContainer.isInsideInteractive(data.global.x, data.global.y)) {
+        var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
+        var cellValue = this.model.getCell(globalPos.x, globalPos.y);
+        if (cellValue != 0) {
+            this.model.setCell(globalPos.x, globalPos.y, 0);
+        }
+        else {
+            this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
+        }
+        this.model.notifyObservers();
     }
     else {
-        this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
+        this.mouseDrag.onMouseDown(data.global);
     }
-    this.model.notifyObservers();
-
-    //TODO: else do this
-    this.mouseDrag.onMouseDown(data.global);
 };
 
 CanvasView.prototype.onMouseMove = function (data) {

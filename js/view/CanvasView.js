@@ -48,44 +48,49 @@ CanvasView.prototype.update = function(model) {
 
 };
 
-CanvasView.prototype.onMouseDown = function(data) {
-    var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
+/////Mouse listeners/////
 
+CanvasView.prototype.onMouseDown = function (data) {
+    //TODO: if (in middle do this)
+    var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
     var cellValue = this.model.getCell(globalPos.x, globalPos.y);
-    console.log(cellValue);
     if (cellValue != 0) {
         this.model.setCell(globalPos.x, globalPos.y, 0);
     }
     else {
-        this.model.setCell(globalPos.x, globalPos.y, 1);
+        this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
     }
-
     this.model.notifyObservers();
 
-    console.log(globalPos.x + "    " + data.global.x);
-    //if in the middle
-    //  get pos from screen
-    //  get/set cell
-
-    //else
-    //  start drag canvas magic
+    //TODO: else do this
+    this.mouseDrag.onMouseDown(data.global);
 };
 
-CanvasView.prototype.onMouseMove = function(data) {
-    //drag canvas
-
+CanvasView.prototype.onMouseMove = function (data) {
+    if (data.originalEvent.which != 0)
+        this.mouseDrag.onMouseMove(data.global);
+    else
+        this.mouseDrag.onMouseUp(data.global);
 }
 
-CanvasView.prototype.onMouseUp = function(data) {
-    //stop drag canvas magic
+CanvasView.prototype.onMouseUp = function (data) {
+    this.mouseDrag.onMouseUp(data.global);
 }
+
+/////Dragging stuff/////
 
 CanvasView.prototype.onDragStart = function (point) {
-    //drag canvas magic
+   
 }
+
 CanvasView.prototype.onDragMove = function (point, move) {
-    //drag canvas magic
+    this.cellContainer.spriteBatchContainer.position.x += move.x;
+    this.cellContainer.spriteBatchContainer.position.y += move.y;
+
+    this.background.tilingSprite.tilePosition.x += move.x;
+    this.background.tilingSprite.tilePosition.y += move.y;
 }
+
 CanvasView.prototype.onDragStop = function (point, move) {
-    //drag canvas magic
+   //TODO: Snap to overlay
 }

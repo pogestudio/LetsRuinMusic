@@ -11,6 +11,7 @@ var CanvasModel = function() {
     this.name = "Awesome client";
 
     this.currentInstrument = null;
+    this.connection = null;
 
     //Params: Values per cell, width(cells), height(cell)
     this.minimapData = new MinimapData(2, 50, 50);
@@ -94,6 +95,28 @@ CanvasModel.prototype.setCell = function(x, y, value) {
 
     xlist[x] = value;
 
+    if (this.connection !== null) {
+        this.connection.sendUpdate(x, y, value);
+    }
+};
+
+//Global coordinates, without syncing it to the server (used by the connection to set data)
+CanvasModel.prototype.setCellFromServer = function (x, y, value) {
+
+    var xlist = this.data[y];
+    if (xlist === undefined) {
+        xlist = {};
+        this.data[y] = xlist;
+    }
+
+    this.changeList.push({
+        x: x,
+        y: y,
+        value: value,
+        prev: xlist[x] || 0
+    });
+
+    xlist[x] = value;
 };
 
 //Global coordinates 

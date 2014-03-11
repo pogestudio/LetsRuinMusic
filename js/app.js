@@ -57,6 +57,7 @@ $(function() {
 
     var connection = new Connection(model);
     connection.connect("ws://localhost:12001");
+    model.connection = connection;
 
     model.notifyObservers();
 

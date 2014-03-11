@@ -13,15 +13,12 @@ MouseDrag.prototype.addListener = function(listener) {
 MouseDrag.prototype.onMouseDown = function (point) {
     if (!this.isMoving) {
         this.isMoving = true;
-        this.startPoint = point;
-        this.prevPoint = point;
+        this.startPoint = { x: point.x, y: point.y };
+        this.prevPoint = { x: point.x, y: point.y };
 
         this.listeners.forEach(function(listener){
-            listener.onDragStart(point);
+            listener.onDragStart({ x:point.x, y:point.y });
         });
-    }
-    else {
-        console.error("MouseDrag: Bad mouse down event");
     }
 }
 
@@ -35,6 +32,8 @@ MouseDrag.prototype.onMouseMove = function (point) {
         this.listeners.forEach(function(listener){
             listener.onDragMove(point, moveSinceLast);
         });
+
+        this.prevPoint = { x:point.x, y:point.y };
     }
 }
 
@@ -50,8 +49,5 @@ MouseDrag.prototype.onMouseUp = function (point) {
             listener.onDragStop(point, moveSinceLast);
         });
 
-    }
-    else {
-        console.error("MouseDrag: Bad mouse down event");
     }
 }

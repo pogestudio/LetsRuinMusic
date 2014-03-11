@@ -7,9 +7,9 @@ $(function() {
     model.setSize(48, 48);
 
     //Test data
-    model.setCell(2, 2, 1);
-    model.setCell(5, 5, 1);
-    model.setCell(3, 8, 1);
+  //  model.setCell(2, 2, 1);
+   // model.setCell(5, 5, 1);
+   // model.setCell(3, 8, 1);
     // model.setCell(19, 19, 1);
     // model.setCell(20, 20, 1);
     // model.setCell(24, 30, 1);
@@ -56,7 +56,7 @@ $(function() {
     var toolbarViewController = new ToolbarViewController(toolbarView, audioModel, model);
 
     var connection = new Connection(model);
-    connection.connect("ws://localhost:12001");
+    connection.connect("ws://qazeh.no-ip.info:12001");
     model.connection = connection;
 
     model.notifyObservers();

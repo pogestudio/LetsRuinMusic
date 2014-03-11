@@ -17,6 +17,8 @@ Connection.prototype.connect = function (host) {
     var connection = this;
     this.isConnected = true;
 
+    var self = this;
+
     this.socket.onopen = function (event) {
         var helloData = {};
         helloData.name = connection.model.name;
@@ -26,9 +28,10 @@ Connection.prototype.connect = function (host) {
         helloData.h = connection.model.height;
         helloData.data = [];
 
-        console.log(JSON.stringify(helloData));
+        //console.log(JSON.stringify(helloData));
         connection.socket.send(JSON.stringify(helloData));
         console.log("Connection opened");
+        self.trySendBuffer();
     };
 
     this.socket.onclose = function (event) {
@@ -38,7 +41,7 @@ Connection.prototype.connect = function (host) {
     };
 
     this.socket.onmessage = function (event) {
-        console.log(event.data);
+        //console.log(event.data);
         var message = JSON.parse(event.data);
         message.data.forEach(function (cell) {
             connection.model.setCellFromServer(cell.x, cell.y, cell.v);
@@ -49,26 +52,22 @@ Connection.prototype.connect = function (host) {
 
 //Might be buffered in the future
 Connection.prototype.sendUpdate = function (x, y, value) {
+    this.buffer.push({
+        x: x,
+        y: y,
+        v: value
+    });
 
-
-    var msg = {
-        data: [
-            {
-                x: x,
-                y: y,
-                v: value
-            }]
-    };
-    if (this.socket !== null)
-        this.socket.send(JSON.stringify(msg));
+    this.trySendBuffer();
 }
 
 
-Connection.prototype.trySend = function () {
-    var msg = {
-        data: this.buffer
-    };
-    if (this.socket !== null && this.socket.isConnected) {
+Connection.prototype.trySendBuffer = function () {
+    if (this.socket !== null && this.socket.readyState == 1) {
+        var msg = {
+            data: this.buffer
+        };
         this.socket.send(JSON.stringify(msg));
+        this.buffer = [];
     }
 }

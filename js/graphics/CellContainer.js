@@ -22,7 +22,14 @@ CellContainer.prototype.getCell = function (globalX, globalY) {
 }
 
 CellContainer.prototype.getGlobalPosFromScreenPos = function(screenX, screenY) {
+    var cellSize = 32;//this.cellFactory.cellSize;
 
+    var result = {
+        x: Math.floor((screenX - this.container.position.x) / cellSize),
+        y: Math.floor((screenY - this.container.position.y) / cellSize)
+    }
+
+    return result;
 }
 
 CellContainer.prototype.onPlaySound = function (x, y) {

@@ -4,8 +4,8 @@ var Cell = function (container, textures, globalX, globalY, cellSize, borderSize
     this.y = globalY;
     this.value = 0;
 
-    this.containerX = globalX * (cellSize + borderSize) + borderSize;
-    this.containerY = globalY * (cellSize + borderSize) + borderSize;
+    this.containerX = globalX * cellSize;
+    this.containerY = globalY * cellSize;
     
     this.sprite = null; //TODO: PIXI sprite
 }

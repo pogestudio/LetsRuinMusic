@@ -25,6 +25,7 @@
     $(window).resize(function () {
         self.renderer.view.style.width = (window.innerWidth - 5) + "px";
         self.renderer.view.style.height = (window.innerHeight - 5) + "px";
+        self.renderer.resize((window.innerWidth - 5), (window.innerHeight - 5));
     });
 
     requestAnimFrame(animate);

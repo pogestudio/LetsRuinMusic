@@ -1,44 +1,91 @@
-﻿
-var CellContainer = function (cellFactory, model, audioViewController) {
+﻿var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer) {
     this.cellFactory = cellFactory;
-    this.container = new PIXI.SpriteBatch();
+    this.spriteBatchContainer = pixiSpriteBatchContainer;
+
 
     model.addObserver(this);
     audioViewController.addObserver(this);
 
     //Some nice data structure for cells
-}
+    this.data = {};
+};
 
-CellContainer.prototype.update = function (model) {
+CellContainer.prototype.update = function(model) {
+    //get changelist
+    //loop through it and set all cells
+    var changeList = model.changeList;
+    var self = this;
+    changeList.forEach(function(entry) {
+        self.setCell(entry.x,entry.y,entry.value);
+    });
+};
 
-}
+CellContainer.prototype.setCell = function(globalX, globalY, value) {
+    //if value is 0
+    //  delete cell at spot
+    if (value === 0) {
+        this.deleteCell(globalX, globalY);
+        return;
+    }
+    //else
+    //  get cell
+    //  if it doesnt exist
+    //      create a new one
+    //  set value
+    var cell = this.getCell(globalX, globalY);
+    if (!cell) {
+        cell = this.cellFactory.createCell(globalX, globalY, this.spriteBatchContainer);
 
-CellContainer.prototype.setCell = function (globalX, globalY, value) {
+        var xlist = this.data[globalY];
+        if (xlist === undefined) {
+            xlist = {};
+            this.data[globalY] = xlist;
+        }
+        xlist[globalX] = cell;
+    }
+    cell.setValue(value);
+};
 
-}
+CellContainer.prototype.getCell = function(globalX, globalY) {
+    //Global coordinates
+    var xlist = this.data[globalY];
+    if (xlist === undefined)
+        return 0;
 
-CellContainer.prototype.getCell = function (globalX, globalY) {
+    return xlist[globalX] || 0;
 
-}
+};
+
+CellContainer.prototype.deleteCell = function(globalX, globalY) {
+    var cell = this.getCell(globalX, globalY);
+    if (!cell) {
+        return;
+    }
+    //remove it from the canvas
+    this.spriteBatchContainer.removeChild(cell.sprite);
+    var xlist = this.data[globalY];
+    //remove it from the data
+    delete xlist[globalX];
+};
 
 CellContainer.prototype.getGlobalPosFromScreenPos = function(screenX, screenY) {
-    var cellSize = 32;//this.cellFactory.cellSize;
+    var cellSize = this.cellFactory.cellSize;
 
     var result = {
-        x: Math.floor((screenX - this.container.position.x) / cellSize),
-        y: Math.floor((screenY - this.container.position.y) / cellSize)
+        x: Math.floor((screenX - this.spriteBatchContainer.position.x) / cellSize),
+        y: Math.floor((screenY - this.spriteBatchContainer.position.y) / cellSize)
     }
 
     return result;
 }
 
-CellContainer.prototype.onPlaySound = function (x, y) {
+CellContainer.prototype.onPlaySound = function(x, y) {
     //for each cell at x, y
     //  startAnim
     //  add to anim list
-}
+};
 
-CellContainer.prototype.updateAnimations = function (timeStep) {
+CellContainer.prototype.updateAnimations = function(timeStep) {
     //update all cells in anim list
     //  check if cell is done, then remove it
-}
+};

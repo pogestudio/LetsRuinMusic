@@ -3,7 +3,7 @@
     this.startPoint = null;
     this.prevPoint = null;
 
-    this.listeners = []:
+    this.listeners = [];
 }
 
 MouseDrag.prototype.addListener = function(listener) {

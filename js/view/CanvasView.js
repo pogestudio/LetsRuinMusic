@@ -12,6 +12,10 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.background = new Background();
     this.stage.addChild(this.background.tilingSprite);
 
+    //Overlay
+    this.overlayContainer = new Overlay(cellSize);
+    this.stage.addChild(this.overlayContainer.overlay);
+
 
 
     var pixiSpriteBatchContainer = new PIXI.SpriteBatch();

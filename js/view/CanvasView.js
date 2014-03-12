@@ -23,20 +23,20 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.cellContainer = new CellContainer(this.cellFactory, model, audioViewController, pixiSpriteBatchContainer);
     model.addObserver(this);
 
-    //Overlay
-
+    //Animation
+    rendererContainer.addFrameListener(this);
 
     //Mouse listeners
     var self = this;
-    rendererContainer.stage.mousedown = rendererContainer.stage.touchstart = function (data) {
+    rendererContainer.stage.mousedown = rendererContainer.stage.touchstart = function(data) {
         self.onMouseDown(data);
     };
-    rendererContainer.stage.mousemove = rendererContainer.stage.touchmove = function (data) {
+    rendererContainer.stage.mousemove = rendererContainer.stage.touchmove = function(data) {
         self.onMouseMove(data);
     };
     rendererContainer.stage.mouseup = rendererContainer.stage.mouseupoutside =
-    rendererContainer.stage.touchend = rendererContainer.stage.touchendoutside = function (data) {
-        self.onMouseUp(data);
+        rendererContainer.stage.touchend = rendererContainer.stage.touchendoutside = function(data) {
+            self.onMouseUp(data);
     };
 
     this.mouseDrag = new MouseDrag();
@@ -54,40 +54,41 @@ CanvasView.prototype.update = function(model) {
 
 /////Mouse listeners/////
 
-CanvasView.prototype.onMouseDown = function (data) {
+CanvasView.prototype.onMouseDown = function(data) {
     //TODO: if (in middle do this)
     var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
     var cellValue = this.model.getCell(globalPos.x, globalPos.y);
     if (cellValue != 0) {
         this.model.setCell(globalPos.x, globalPos.y, 0);
-    }
-    else {
+    } else {
         this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
     }
     this.model.notifyObservers();
+
+    console.log("Cell X: " + globalPos.x + " Cell Y: " + globalPos.y);
 
     //TODO: else do this
     this.mouseDrag.onMouseDown(data.global);
 };
 
-CanvasView.prototype.onMouseMove = function (data) {
+CanvasView.prototype.onMouseMove = function(data) {
     if (data.originalEvent.which != 0)
         this.mouseDrag.onMouseMove(data.global);
     else
         this.mouseDrag.onMouseUp(data.global);
 }
 
-CanvasView.prototype.onMouseUp = function (data) {
+CanvasView.prototype.onMouseUp = function(data) {
     this.mouseDrag.onMouseUp(data.global);
 }
 
 /////Dragging stuff/////
 
-CanvasView.prototype.onDragStart = function (point) {
-   
+CanvasView.prototype.onDragStart = function(point) {
+
 }
 
-CanvasView.prototype.onDragMove = function (point, move) {
+CanvasView.prototype.onDragMove = function(point, move) {
     this.cellContainer.spriteBatchContainer.position.x += move.x;
     this.cellContainer.spriteBatchContainer.position.y += move.y;
 
@@ -95,6 +96,6 @@ CanvasView.prototype.onDragMove = function (point, move) {
     this.background.tilingSprite.tilePosition.y += move.y;
 }
 
-CanvasView.prototype.onDragStop = function (point, move) {
-   //TODO: Snap to overlay
+CanvasView.prototype.onDragStop = function(point, move) {
+    //TODO: Snap to overlay
 }

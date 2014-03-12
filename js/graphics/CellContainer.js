@@ -82,9 +82,9 @@ CellContainer.prototype.getGlobalPosFromScreenPos = function(screenX, screenY) {
 }
 
 CellContainer.prototype.onPlaySound = function(x, y) {
-    //Get played cell
+    //Get cell that started playing
     var cell = this.getCell(x, y);
-    //Start animation    
+    //Start animation
     cell.startAnimation();
     //Add the cell to animation list
     this.animationList.push(cell);
@@ -96,7 +96,7 @@ CellContainer.prototype.updateAnimations = function(timeStep) {
 
         //Go through the list and update animation on each item
         for (var i = 0; i < this.animationList.length; i++) {
-            
+
             var cell = this.animationList[i];
             cell.updateAnimation();
 

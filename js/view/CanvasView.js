@@ -24,18 +24,17 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.overlayContainer = new Overlay(this.cellSize);
     this.stage.addChild(this.overlayContainer.overlay);
 
-
     //Mouse listeners
     var self = this;
-    rendererContainer.stage.mousedown = rendererContainer.stage.touchstart = function (data) {
+    rendererContainer.stage.mousedown = rendererContainer.stage.touchstart = function(data) {
         self.onMouseDown(data);
     };
-    rendererContainer.stage.mousemove = rendererContainer.stage.touchmove = function (data) {
+    rendererContainer.stage.mousemove = rendererContainer.stage.touchmove = function(data) {
         self.onMouseMove(data);
     };
     rendererContainer.stage.mouseup = rendererContainer.stage.mouseupoutside =
-    rendererContainer.stage.touchend = rendererContainer.stage.touchendoutside = function (data) {
-        self.onMouseUp(data);
+        rendererContainer.stage.touchend = rendererContainer.stage.touchendoutside = function(data) {
+            self.onMouseUp(data);
     };
 
     this.mouseDrag = new MouseDrag();
@@ -52,7 +51,6 @@ CanvasView.prototype.update = function(model) {
 };
 
 /////Mouse listeners/////
-
 CanvasView.prototype.onMouseDown = function (data) {
   
     if (this.overlayContainer.isInsideInteractive(data.global.x, data.global.y)) {
@@ -71,24 +69,24 @@ CanvasView.prototype.onMouseDown = function (data) {
     }
 };
 
-CanvasView.prototype.onMouseMove = function (data) {
+CanvasView.prototype.onMouseMove = function(data) {
     if (data.originalEvent.which != 0)
         this.mouseDrag.onMouseMove(data.global);
     else
         this.mouseDrag.onMouseUp(data.global);
 }
 
-CanvasView.prototype.onMouseUp = function (data) {
+CanvasView.prototype.onMouseUp = function(data) {
     this.mouseDrag.onMouseUp(data.global);
 }
 
 /////Dragging stuff/////
 
-CanvasView.prototype.onDragStart = function (point) {
-   
+CanvasView.prototype.onDragStart = function(point) {
+
 }
 
-CanvasView.prototype.onDragMove = function (point, move) {
+CanvasView.prototype.onDragMove = function(point, move) {
     this.cellContainer.spriteBatchContainer.position.x += move.x;
     this.cellContainer.spriteBatchContainer.position.y += move.y;
 

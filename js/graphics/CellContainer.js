@@ -1,4 +1,7 @@
+
 ﻿var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
+
+    this.animationList = [];
     this.cellFactory = cellFactory;
     this.spriteBatchContainer = pixiSpriteBatchContainer;
     this.isForMiniMap = isForMiniMap;
@@ -91,12 +94,31 @@ CellContainer.prototype.getGlobalPosFromScreenPos = function(screenX, screenY) {
 };
 
 CellContainer.prototype.onPlaySound = function(x, y) {
-    //for each cell at x, y
-    //  startAnim
-    //  add to anim list
+    //Get cell that started playing
+    var cell = this.getCell(x, y);
+    //Start animation
+    cell.startAnimation();
+    //Add the cell to animation list
+    this.animationList.push(cell);
 };
 
 CellContainer.prototype.updateAnimations = function(timeStep) {
-    //update all cells in anim list
-    //  check if cell is done, then remove it
+    //Check if animationList is populated
+    if (this.animationList[0] !== undefined) {
+
+        //Go through the list and update animation on each item
+        for (var i = 0; i < this.animationList.length; i++) {
+
+            var cell = this.animationList[i];
+            cell.updateAnimation();
+
+            //Remove the cell from animationList when animation is done
+            if (cell.isAnimationDone()) {
+
+                cell.endAnimation();
+                var indexofAnimateBuffer = this.animationList.indexOf(cell);
+                this.animationList.splice(indexofAnimateBuffer, 1);
+            }
+        }
+    }
 };

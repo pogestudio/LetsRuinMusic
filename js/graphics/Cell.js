@@ -9,7 +9,7 @@ var Cell = function (container, globalX, globalY, cellSize, borderSize) {
     this.containerX = globalX * cellSize + cellSize / 2;
     this.containerY = globalY * cellSize + cellSize / 2;
 
-    this.sprite = new PIXI.Sprite.fromImage("images/white-square32.png");
+    this.sprite = new PIXI.Sprite.fromImage("images/white-square32-round.png");
 
     this.plotHelper;
     this.sprite.anchor.x = 0.5;

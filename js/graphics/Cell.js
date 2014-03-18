@@ -31,8 +31,8 @@ Cell.prototype.updateAnimation = function(timeStep) {
 
     this.plotHelper += 0.05;
 
-    this.sprite.scale.x = -0.5*this.plotHelper*this.plotHelper+1.5;
-    this.sprite.scale.y = -0.5*this.plotHelper*this.plotHelper+1.5;
+    this.sprite.scale.x = -0.2*this.plotHelper*this.plotHelper+1.2;
+    this.sprite.scale.y = -0.2*this.plotHelper*this.plotHelper+1.2;
     this.sprite.alpha = this.plotHelper*this.plotHelper+0.5;    
 };
 

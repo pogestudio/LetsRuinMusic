@@ -35,7 +35,6 @@ CanvasModel.prototype.addObserver = function(observer) {
 };
 
 CanvasModel.prototype.notifyObservers = function() {
-    this._updateViewData();
 
     this.minimapData.update(this);
 
@@ -50,27 +49,6 @@ CanvasModel.prototype.notifyObservers = function() {
 
 };
 
-//Internal: updates viewData matrix
-CanvasModel.prototype._updateViewData = function() {
-    this.viewData = [];
-
-    for (var i = 0; i < this.height; ++i) {
-        for (var j = 0; j < this.width; ++j) {
-            var value = 0;
-
-            var x = j + this.x;
-            var y = i + this.y;
-
-            this.viewData.push(this.getCell(x, y));
-        }
-    }
-};
-
-//Local coordinates: (0-width, 0-height)
-CanvasModel.prototype.getCellLocal = function(x, y) {
-    return this.viewData[this.width * y + x];
-};
-
 //Global coordinates
 CanvasModel.prototype.getCell = function(x, y) {
     var xlist = this.data[y];
@@ -78,11 +56,6 @@ CanvasModel.prototype.getCell = function(x, y) {
         return 0;
 
     return xlist[x] || 0;
-};
-
-//Local coordinates: (0-width, 0-height)
-CanvasModel.prototype.setCellLocal = function(x, y, value) {
-    this.setCell(this.x + x, this.y + y, value);
 };
 
 //Global coordinates 

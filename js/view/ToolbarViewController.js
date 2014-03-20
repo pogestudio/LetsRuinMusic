@@ -2,6 +2,7 @@ var ToolbarViewController = function(view, audioModel, model){
     this.view = view;
     this.audioModel = audioModel;
     this.model = model;
+    this.model.addObserver(this);
 
     this.observers = [];
 
@@ -9,6 +10,7 @@ var ToolbarViewController = function(view, audioModel, model){
     this.loadEventListeners();
 
     this.model.setInstrNr(1);
+
 }
 
 ToolbarViewController.prototype.loadControls = function(){
@@ -32,12 +34,41 @@ ToolbarViewController.prototype.loadControls = function(){
     this.view.CB1Controller = this.view.gui.add(this.view, "drum").listen();
     this.view.CB1Controller.onChange(function(value){
     	cont.selInstrument(4);
-        });
+    });
 
     this.view.CB2Controller = this.view.gui.add(this.view, "delay", 100, 300, 1).listen();
     this.view.CB2Controller.onChange(function(value){
         cont.notifyObservers(value);
     });
+
+    this.view.CB4Controller = this.view.gui.add(this.view, "posx").listen()
+    this.view.CB4Controller.onChange(function(value){
+        cont.teleport(0, value)
+    }); 
+    this.view.CB4Controller = this.view.gui.add(this.view, "posy").listen()
+    this.view.CB4Controller.onChange(function(value){
+        cont.teleport(1, value);
+    });
+}
+
+ToolbarViewController.prototype.update = function(model) { 
+    this.view.posx = this.model.x;
+    this.view.posy = this.model.y;
+    console.log("update");
+};
+
+
+
+ToolbarViewController.prototype.teleport = function (axis, value){
+    var value = parseInt(value);
+    if(!isNaN(value)){
+        if(axis == 0){
+            this.model.setPositionAndJump(value, this.model.y);
+        }
+        else if(axis == 1){
+            this.model.setPositionAndJump(this.model.x, value);
+        }
+    }
 }
 
 ToolbarViewController.prototype.truefalse = function(b1, b2, b3, b4){

@@ -75,5 +75,5 @@ AudioViewController
 AudioViewController.prototype.playToneInstr = function(note, velocity, delay, instr) {
     MIDI.programChange(0, instr);
     MIDI.noteOn(0, note, velocity, 0);
-    MIDI.noteOff(0, note, delay);
+    //MIDI.noteOff(0, note, delay);
 }

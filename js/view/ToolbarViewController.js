@@ -81,7 +81,6 @@ ToolbarViewController.prototype.notifyObservers = function(value) {
 }
 
 ToolbarViewController.prototype.loadEventListeners = function () {
-    console.log("wat");
     var tb = this;
     window.addEventListener('keyup', function (e) {
         switch(e.keyCode){

@@ -8,11 +8,37 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.mouseDownInInteractive = false;
     this.previousCellValue;
 
-
     //Factory needs parameters
     this.cellSize = 32;
     var borderSize = 1;
     this.cellFactory = new CellFactory(this.cellSize, borderSize);
+
+    //keyevents
+    var self = this;
+
+    window.addEventListener('keyup', function (e) {
+        var currentXpos = self.model.x;
+        var currentYpos = self.model.y;
+
+        switch(e.keyCode){
+            case 87:
+                self.moveY += self.cellSize;
+                self.model.setPosition(currentXpos, currentYpos - 1);
+                break;
+            case 65:
+                self.moveX += self.cellSize;
+                self.model.setPosition(currentXpos - 1, currentYpos);
+                break;
+            case 83:
+                self.moveY -= self.cellSize;
+                self.model.setPosition(currentXpos, currentYpos + 1);
+                break;
+            case 68:
+                self.moveX -= self.cellSize;
+                self.model.setPosition(currentXpos + 1, currentYpos);
+                break;
+        }
+    }, false);
 
     //Background
     this.background = new Background();
@@ -100,7 +126,9 @@ CanvasView.prototype.onMouseDown = function(data) {
 
     if (this.overlayContainer.isInsideInteractive(data.global.x, data.global.y)) {
 
+        //mouse was pressed in interactive
         this.mouseDownInInteractive = true;
+
         var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
         var cellValue = this.model.getCell(globalPos.x, globalPos.y);
         this.previousCellValue = cellValue;
@@ -129,7 +157,6 @@ CanvasView.prototype.onMouseMove = function(data) {
         if(this.previousCellValue != this.model.getInstrNr() && cellValue != this.model.getInstrNr()) {
             this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
         }
-
         this.model.notifyObservers();
     }
 

@@ -88,7 +88,6 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
 CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
     this.cellContainer.updateAnimations(timeStep);
 
-
     var moveX = this.moveX * timeStep * 10.0;
     var moveY = this.moveY * timeStep * 10.0;
 
@@ -103,6 +102,12 @@ CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
 
     this.moveX -= moveX;
     this.moveY -= moveY;
+
+    for (var i in this.clientBalls) {
+        var ball = this.clientBalls[i];
+        ball.sprite.x += (ball.sprite.tx - ball.sprite.x) * timeStep * 6;
+        ball.sprite.y += (ball.sprite.ty - ball.sprite.y) * timeStep * 6;
+    }
 };
 
 //Notification from model
@@ -117,16 +122,30 @@ CanvasView.prototype.update = function(model) {
         this.moveY -= dY;
     }
 
-    model.changedClients.forEach(function(client) {
+    model.changedClients.forEach(function (client) {
+        if (client.id == model.id)
+            return;
+
         var ball = self.clientBalls[client.id];
 
         if (ball === undefined) {
             var ball = new ClientBall(self.clientBallContainer);
             self.clientBalls[client.id] = ball;
+            ball.color = client.color;
+            ball.sprite.x = (client.view.x + client.view.w * 0.5) * self.cellSize;
+            ball.sprite.y = (client.view.y + client.view.h * 0.5) * self.cellSize;
         }
 
-        ball.sprite.x = (client.view.x + client.view.w * 0.5) * self.cellSize;
-        ball.sprite.y = (client.view.y + client.view.h * 0.5) * self.cellSize;
+        ball.sprite.tx = (client.view.x + client.view.w * 0.5) * self.cellSize;
+        ball.sprite.ty = (client.view.y + client.view.h * 0.5) * self.cellSize;
+    });
+    
+    model.removedClients.forEach(function (client) {
+        var ball = self.clientBalls[client.id];
+        if (ball != null) {
+            self.clientBallContainer.removeChild(ball.sprite);
+            delete self.clientBalls[client.id];
+        }
     });
 };
 

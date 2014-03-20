@@ -1,5 +1,5 @@
 
-var Cell = function (container, globalX, globalY, cellSize, borderSize) {
+var Cell = function (container, globalX, globalY, cellSize, borderSize, imgPath) {
 
     this.x = globalX;
     this.y = globalY;
@@ -9,7 +9,7 @@ var Cell = function (container, globalX, globalY, cellSize, borderSize) {
     this.containerX = globalX * cellSize + cellSize / 2;
     this.containerY = globalY * cellSize + cellSize / 2;
 
-    this.sprite = new PIXI.Sprite.fromImage("images/white-square32-round.png");
+    this.sprite = new PIXI.Sprite.fromImage(imgPath);
 
     this.plotHelper;
     this.sprite.anchor.x = 0.5;
@@ -23,17 +23,17 @@ var Cell = function (container, globalX, globalY, cellSize, borderSize) {
 
 Cell.prototype.startAnimation = function() {
 
-    this.plotHelper = -1;
+    this.plotHelper = 0;
 
 };
 
 Cell.prototype.updateAnimation = function(timeStep) {
 
-    this.plotHelper += 0.05;
+    this.plotHelper += 2*timeStep;
 
     this.sprite.scale.x = -0.2*this.plotHelper*this.plotHelper+1.2;
     this.sprite.scale.y = -0.2*this.plotHelper*this.plotHelper+1.2;
-    this.sprite.alpha = this.plotHelper*this.plotHelper+0.5;    
+    this.sprite.alpha = -this.plotHelper*this.plotHelper+2;
 };
 
 Cell.prototype.endAnimation = function() {
@@ -45,7 +45,7 @@ Cell.prototype.endAnimation = function() {
 
 Cell.prototype.isAnimationDone = function() {
 
-    return this.sprite.scale.x < 1;
+    return this.plotHelper > 1;
 
 };
 

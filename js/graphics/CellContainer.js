@@ -1,5 +1,5 @@
-
-﻿var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
+﻿
+var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
 
     this.animationList = [];
     this.cellFactory = cellFactory;
@@ -46,9 +46,27 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
     //  if it doesnt exist
     //      create a new one
     //  set value
+    var imgPath;
     var cell = this.getCell(globalX, globalY);
+
+    //set the image for the instrument number
+    switch (value) {
+        case 1:
+            var imgPath = "images/pink-square32-round.png";
+            break;
+        case 2:
+            var imgPath = "images/blue-square32-round.png";
+            break;
+        case 3:
+            var imgPath = "images/red-square32-round.png";
+            break;
+        case 4:
+            var imgPath = "images/green-square32-round.png";
+            break;
+    }
+
     if (!cell) {
-        cell = this.cellFactory.createCell(globalX, globalY, this.spriteBatchContainer);
+        cell = this.cellFactory.createCell(globalX, globalY, this.spriteBatchContainer, imgPath);
 
         var xlist = this.data[globalY];
         if (xlist === undefined) {
@@ -110,7 +128,7 @@ CellContainer.prototype.updateAnimations = function(timeStep) {
         for (var i = 0; i < this.animationList.length; i++) {
 
             var cell = this.animationList[i];
-            cell.updateAnimation();
+            cell.updateAnimation(timeStep);
 
             //Remove the cell from animationList when animation is done
             if (cell.isAnimationDone()) {

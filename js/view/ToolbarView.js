@@ -11,7 +11,7 @@ ToolbarView.prototype.load = function(){
     this.selInstr = 1;
     this.model.setInstrNr(this.selInstr);
     view.guitar = true;
-    view.sax = false;
+    view.glockenspiel = false;
     view.piano = false;
     view.drum = false;
     

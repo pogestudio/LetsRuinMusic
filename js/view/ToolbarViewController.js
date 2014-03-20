@@ -16,7 +16,7 @@ ToolbarViewController.prototype.loadControls = function(){
 	console.log(1);
     });
 
-    this.view.CB1Controller = this.view.gui.add(this.view, "sax").listen();
+    this.view.CB1Controller = this.view.gui.add(this.view, "glockenspiel").listen();
     this.view.CB1Controller.onChange(function(value){
 	cont.truefalse(false, true, false, false);
 	cont.model.setInstrNr(2);

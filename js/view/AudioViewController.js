@@ -55,8 +55,8 @@ AudioViewController.prototype.clearSound = function() {
         this.changeDuration = false;
     }
 }
-
-AudioViewController.prototype.updateSoundY = function() {
+AudioViewController
+.prototype.updateSoundY = function() {
     var x = this.model.x;
     var y = this.model.y;
 
@@ -66,7 +66,7 @@ AudioViewController.prototype.updateSoundY = function() {
             var note = this.tones[(y + 16 - i) % this.tones.length];
             var instr = this.instruments[dbint];
             this.notifyObservers(x + this.xpos, i);
-            this.playToneInstr(note, 127, 0, instr);
+            this.playToneInstr(note, 127, 1, instr);
         }
     }
     this.xpos = (this.xpos + 1) % 16;
@@ -74,6 +74,6 @@ AudioViewController.prototype.updateSoundY = function() {
 
 AudioViewController.prototype.playToneInstr = function(note, velocity, delay, instr) {
     MIDI.programChange(0, instr);
-    MIDI.noteOn(0, note, velocity, delay);
-    MIDI.noteOff(0, note, 1);
+    MIDI.noteOn(0, note, velocity, 0);
+    MIDI.noteOff(0, note, delay);
 }

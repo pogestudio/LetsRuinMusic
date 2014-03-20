@@ -6,6 +6,7 @@ var ToolbarViewController = function(view, audioModel, model){
     this.observers = [];
 
     this.loadControls();
+    this.loadEventListeners();
 
     this.model.setInstrNr(1);
 }
@@ -47,25 +48,24 @@ ToolbarViewController.prototype.truefalse = function(b1, b2, b3, b4){
 }
 
 ToolbarViewController.prototype.selInstrument = function(instrNr){
-    if(instrNr == 1){
-        this.truefalse(true,false,false,false);
-        this.model.setInstrNr(1);
+    switch(instrNr){
+        case 1:
+            this.truefalse(true,false,false,false);
+            this.model.setInstrNr(1);
+            break;
+        case 2:
+            this.truefalse(false,true,false,false);
+            this.model.setInstrNr(2);
+            break;
+        case 3:
+            this.truefalse(false,false,true,false);
+            this.model.setInstrNr(3);
+            break;
+        case 4:
+            this.truefalse(false,false,false,true);
+            this.model.setInstrNr(4);
+            break;
     }
-
-    else if(instrNr == 2){
-        this.truefalse(false,true,false,false);
-        this.model.setInstrNr(2);
-    }
-
-    else if(instrNr == 3){
-        this.truefalse(false,false,true,false);
-        this.model.setInstrNr(3);
-    }
-     
-    else if(instrNr == 4){
-        this.truefalse(false,false,false,true);
-        this.model.setInstrNr(4);
-    }  
 }
 
 ToolbarViewController.prototype.addObserver = function(observer) {
@@ -78,4 +78,25 @@ ToolbarViewController.prototype.notifyObservers = function(value) {
         this.observers[i].clearSound();
         this.observers[i].changeTempo(value);
     }
+}
+
+ToolbarViewController.prototype.loadEventListeners = function () {
+    console.log("wat");
+    var tb = this;
+    window.addEventListener('keyup', function (e) {
+        switch(e.keyCode){
+            case 49:
+                tb.selInstrument(1);
+                break;
+            case 50:
+                tb.selInstrument(2);
+                break;
+            case 51:
+                tb.selInstrument(3);
+                break;
+            case 52:
+                tb.selInstrument(4);
+                break;
+        }
+    }, false);
 }

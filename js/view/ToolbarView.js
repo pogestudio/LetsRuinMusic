@@ -14,6 +14,6 @@ ToolbarView.prototype.load = function(){
     view.drum = false;
 
     view.delay = 300;
-
+    
     view.gui = new dat.GUI();
 }

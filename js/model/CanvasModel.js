@@ -15,6 +15,11 @@ var CanvasModel = function() {
 
     //Params: Values per cell, width(cells), height(cell)
     this.minimapData = new MinimapData(2, 50, 50);
+
+    this.id = -1;
+    this.clients = {};
+    this.changedClients = [];
+    this.removedClients = [];
 };
 
 CanvasModel.prototype.setInstrNr = function(number) {
@@ -37,7 +42,10 @@ CanvasModel.prototype.notifyObservers = function() {
     for (var i = 0; i < this.observers.length; i++) {
         this.observers[i].update(this);
     }
+
     this.changeList = [];
+    this.changedClients = [];
+    this.removedClients = [];
     this.minimapData.clearChangeList();
 
 };
@@ -179,3 +187,30 @@ CanvasModel.prototype.setName = function (name) {
         this.connection.sendNameUpdate(this.name);
     }
 }
+
+CanvasModel.prototype.handleClientUpdate = function (client) {
+    var updatedClient = this.clients[client.id];
+
+    if (client.dead !== undefined) {
+        if (updatedClient !== undefined) {
+            this.removedClients.push(updatedClient);
+            delete this.clients[client.id];
+        }
+    }
+    else {
+        if (updatedClient === undefined)
+            updatedClient = {};
+
+        if (client.view !== undefined) {
+            updatedClient.view = client.view;
+        }
+        if (client.name !== undefined) {
+            updatedClient.name = client.name;
+        }
+
+        updatedClient.id = client.id;
+
+        this.clients[updatedClient.id] = updatedClient;
+        this.changedClients.push(updatedClient);
+    }
+};

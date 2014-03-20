@@ -44,11 +44,19 @@ Connection.prototype.connect = function (host) {
     };
 
     this.socket.onmessage = function (event) {
-        //console.log(event.data);
+        console.log(event.data);
         var message = JSON.parse(event.data);
+        if (message.your_id !== undefined) {
+            connection.model.id = message.your_id;
+        }
         if (message.data !== undefined) {
             message.data.forEach(function (cell) {
                 connection.model.setCellFromServer(cell.x, cell.y, cell.v);
+            });
+        }
+        if (message.clients !== undefined) {
+            message.clients.forEach(function (client) {
+                connection.model.handleClientUpdate(client);
             });
         }
         connection.model.notifyObservers();

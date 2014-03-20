@@ -117,7 +117,7 @@ CanvasView.prototype.onMouseDown = function(data) {
 
 CanvasView.prototype.onMouseMove = function(data) {
     
-    if(this.mouseDownInInteractive){
+    if(this.overlayContainer.isInsideInteractive(data.global.x, data.global.y) && this.mouseDownInInteractive){
         
         var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
         var cellValue = this.model.getCell(globalPos.x, globalPos.y);

@@ -15,27 +15,23 @@ ToolbarViewController.prototype.loadControls = function(){
     
     this.view.CB1Controller = this.view.gui.add(this.view, "guitar").listen();
     this.view.CB1Controller.onChange(function(value){
-    	cont.truefalse(true, false, false, false);
-    	cont.model.setInstrNr(1);
+    	cont.selInstrument(1);
     });
 
     this.view.CB1Controller = this.view.gui.add(this.view, "glockenspiel").listen();
     this.view.CB1Controller.onChange(function(value){
-    	cont.truefalse(false, true, false, false);
-    	cont.model.setInstrNr(2);
+    	cont.selInstrument(2);
     });
 
     this.view.CB1Controller = this.view.gui.add(this.view, "piano").listen();
     this.view.CB1Controller.onChange(function(value){
-    	cont.truefalse(false, false, true, false);
-    	cont.model.setInstrNr(3);
+    	cont.selInstrument(3);
     });
 
     this.view.CB1Controller = this.view.gui.add(this.view, "drum").listen();
     this.view.CB1Controller.onChange(function(value){
-    	cont.truefalse(false, false, false, true);
-    	cont.model.setInstrNr(4);
-    });
+    	cont.selInstrument(4);
+        });
 
     this.view.CB2Controller = this.view.gui.add(this.view, "delay", 100, 300, 1).listen();
     this.view.CB2Controller.onChange(function(value){
@@ -48,6 +44,28 @@ ToolbarViewController.prototype.truefalse = function(b1, b2, b3, b4){
     this.view.glockenspiel= b2;
     this.view.piano = b3;
     this.view.drum = b4;
+}
+
+ToolbarViewController.prototype.selInstrument = function(instrNr){
+    if(instrNr == 1){
+        this.truefalse(true,false,false,false);
+        this.model.setInstrNr(1);
+    }
+
+    else if(instrNr == 2){
+        this.truefalse(false,true,false,false);
+        this.model.setInstrNr(2);
+    }
+
+    else if(instrNr == 3){
+        this.truefalse(false,false,true,false);
+        this.model.setInstrNr(3);
+    }
+     
+    else if(instrNr == 4){
+        this.truefalse(false,false,false,true);
+        this.model.setInstrNr(4);
+    }  
 }
 
 ToolbarViewController.prototype.addObserver = function(observer) {

@@ -69,16 +69,16 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
     //set the image for the instrument number
     switch (value) {
         case 1:
-            var imgPath = "images/pink-square32-round.png";
+            imgPath = "images/pink-square32-round.png";
             break;
         case 2:
-            var imgPath = "images/blue-square32-round.png";
+            imgPath = "images/blue-square32-round.png";
             break;
         case 3:
-            var imgPath = "images/red-square32-round.png";
+            imgPath = "images/red-square32-round.png";
             break;
         case 4:
-            var imgPath = "images/green-square32-round.png";
+            imgPath = "images/green-square32-round.png";
             break;
     }
 
@@ -180,11 +180,12 @@ CellContainer.prototype.userMovedPosition = function(model) {
 
 CellContainer.prototype.updateMiniMap = function(model) {
 
+    this.minimapInfo.centerMappOffset = this.minimapInfo.miniMapSize / 4 + 16; //16 MAGIC NUMBER? wtf this is weird
     //if the position has changed
 
     //offset the spritebatchcontainer
-    this.spriteBatchContainer.x = -model.x + this.minimapInfo.miniMapSize / 4 + 16; //16 MAGIC NUMBER? wtf this is weird
-    this.spriteBatchContainer.y = -model.y + this.minimapInfo.miniMapSize / 4 + 16; //16 WOOOT why 16?
+    this.spriteBatchContainer.x = -model.x + this.minimapInfo.centerMappOffset;
+    this.spriteBatchContainer.y = -model.y + this.minimapInfo.centerMappOffset;
 
     //get the way in which it changed position
     var userPosX = model.x;

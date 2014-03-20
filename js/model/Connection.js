@@ -5,7 +5,7 @@
     this.retries = 5;//TODO: change retries into something time based
     this.model.connection = this;
     this.buffer = [];
-}
+};
 
 Connection.prototype.connect = function (host) {
     if (this.isConnected)

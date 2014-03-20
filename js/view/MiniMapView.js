@@ -7,12 +7,8 @@ var MiniMapView = function(model, rendererContainer) {
 
     this.cellFactory = new MiniMapCellFactory(cellSize, borderSize);
 
-    //create texture
-    var backGroundTexture =  PIXI.Texture.fromImage("images/black-square1_no_border.png");
-    // to work in webGL the texture size must be a power of two
-    var miniMapSize = 300;
-    var miniMapTileBackground = new PIXI.TilingSprite(backGroundTexture, miniMapSize,miniMapSize);
-    rendererContainer.stage.addChild(miniMapTileBackground);
+    var miniMapTileBackground = new MiniMapBackground(model,300);
+    rendererContainer.stage.addChild(miniMapTileBackground.tileSprite);
     
     var pixiSpriteBatchContainer = new PIXI.SpriteBatch();
     rendererContainer.stage.addChild(pixiSpriteBatchContainer);
@@ -20,6 +16,8 @@ var MiniMapView = function(model, rendererContainer) {
     var isMiniMapView = true;
     this.cellContainer = new CellContainer(this.cellFactory, model, null, pixiSpriteBatchContainer, isMiniMapView);
     model.addObserver(this);
+
+    //miniMapTileBackground.miniMapOffset = this.cellContainer.minimapInfo.miniMapOffset;
 
     //update so that that it renders correct initially
     //SHOULD BE CALLED AFTER the model has fetched the data from the view!

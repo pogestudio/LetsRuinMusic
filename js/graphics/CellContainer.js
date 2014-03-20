@@ -65,7 +65,11 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
             break;
     }
 
-    if (!cell) {
+    if (cell.value != value) {
+        if(cell.value != 0) {
+            this.deleteCell(globalX,globalY);
+        }
+        
         cell = this.cellFactory.createCell(globalX, globalY, this.spriteBatchContainer, imgPath);
 
         var xlist = this.data[globalY];
@@ -75,6 +79,7 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
         }
         xlist[globalX] = cell;
     }
+
     cell.setValue(value);
 };
 

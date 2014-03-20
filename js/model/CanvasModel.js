@@ -100,20 +100,6 @@ CanvasModel.prototype.setCellFromServer = function (x, y, value) {
     xlist[x] = value;
 };
 
-//Global coordinates 
-CanvasModel.prototype.setTopLeft = function(x, y) {
-    //whenever we set the cell, we have to redraw _all_ squares in local space
-
-    this.x = x;
-    this.y = y;
-
-    this._addAllLocalCellsToChangeList();
-};
-
-CanvasModel.prototype.setTopLeftOffset = function(xOff, yOff) {
-    this.setTopLeft(this.x + xOff, this.y + yOff);
-};
-
 
 CanvasModel.prototype._addAllLocalCellsToChangeList = function() {
 

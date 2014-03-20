@@ -105,8 +105,7 @@ CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
 
     for (var i in this.clientBalls) {
         var ball = this.clientBalls[i];
-        ball.sprite.x += (ball.sprite.tx - ball.sprite.x) * timeStep * 6;
-        ball.sprite.y += (ball.sprite.ty - ball.sprite.y) * timeStep * 6;
+        ball.update(timeStep)
     }
 };
 
@@ -129,21 +128,18 @@ CanvasView.prototype.update = function(model) {
         var ball = self.clientBalls[client.id];
 
         if (ball === undefined) {
-            var ball = new ClientBall(self.clientBallContainer);
+            var ball = new ClientBall(self.clientBallContainer, client.color, self.cellSize);
             self.clientBalls[client.id] = ball;
-            ball.color = client.color;
-            ball.sprite.x = (client.view.x + client.view.w * 0.5) * self.cellSize;
-            ball.sprite.y = (client.view.y + client.view.h * 0.5) * self.cellSize;
+            ball.setPos(client.view.x, client.view.y, client.view.w, client.view.h);
         }
 
-        ball.sprite.tx = (client.view.x + client.view.w * 0.5) * self.cellSize;
-        ball.sprite.ty = (client.view.y + client.view.h * 0.5) * self.cellSize;
+        ball.moveTo(client.view.x, client.view.y, client.view.w, client.view.h);
     });
     
     model.removedClients.forEach(function (client) {
         var ball = self.clientBalls[client.id];
         if (ball != null) {
-            self.clientBallContainer.removeChild(ball.sprite);
+            ball.destroy(self.clientBallContainer);
             delete self.clientBalls[client.id];
         }
     });

@@ -181,7 +181,21 @@ CanvasModel.prototype.handleClientUpdate = function (client) {
     }
     else {
         if (updatedClient === undefined) {
-            updatedClient = { color:  Math.random() * 0xffffff };
+            var r = Math.random();
+            var g = Math.random();
+            var b = Math.random();
+
+            var max = r;
+            if (g > max)
+                max = g;
+            if (b > max)
+                max = b;
+
+            r /= max;
+            g /= max;
+            b /= max;
+
+            updatedClient = { color: r * 0xff0000 + g * 0xff00 + b * 0xff };
         }
 
         if (client.view !== undefined) {

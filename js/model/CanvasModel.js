@@ -173,8 +173,9 @@ CanvasModel.prototype.handleClientUpdate = function (client) {
         }
     }
     else {
-        if (updatedClient === undefined)
-            updatedClient = {};
+        if (updatedClient === undefined) {
+            updatedClient = { color:  tinycolor.random() };
+        }
 
         if (client.view !== undefined) {
             updatedClient.view = client.view;

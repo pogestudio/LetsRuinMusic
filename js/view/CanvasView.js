@@ -136,7 +136,6 @@ CanvasView.prototype.onDragStop = function(point, move) {
         this.overlayContainer.y + diffY);
 
     this.model.setPosition(globalPos.x, globalPos.y);
-
 }
 
 CanvasView.prototype._offsetSpriteBatchAndBackground = function() {

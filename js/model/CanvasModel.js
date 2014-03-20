@@ -14,7 +14,7 @@ var CanvasModel = function() {
     this.connection = null;
 
     //Params: Values per cell, width(cells), height(cell)
-    this.minimapData = new MinimapData(2, 50, 50);
+    this.minimapData = new MinimapData(1, 50, 50);
 
     this.id = -1;
     this.clients = {};

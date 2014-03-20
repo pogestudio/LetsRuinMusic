@@ -4,7 +4,7 @@
     this.borderSize = borderSize;
 };
 
-CellFactory.prototype.createCell = function(globalX, globalY, container) {
-    var cell = new Cell(container, globalX, globalY, this.cellSize, this.borderSize);
+CellFactory.prototype.createCell = function(globalX, globalY, container, imgPath) {
+    var cell = new Cell(container, globalX, globalY, this.cellSize, this.borderSize, imgPath);
     return cell;
 };

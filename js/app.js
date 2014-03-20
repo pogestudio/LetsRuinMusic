@@ -55,6 +55,7 @@ $(function() {
 
     var toolbarView = new ToolbarView($("#toolbarView"), audioModel, model);
     var toolbarViewController = new ToolbarViewController(toolbarView, audioModel, model);
+    toolbarViewController.addObserver(audioViewController);
 
     var connection = new Connection(model);
     //connection.connect("ws://192.168.1.101:12001");

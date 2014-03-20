@@ -1,5 +1,4 @@
-
-﻿var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
+var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
 
     this.animationList = [];
     this.cellFactory = cellFactory;

@@ -5,6 +5,9 @@ var CanvasModel = function() {
     this.x = 0;
     this.y = 0;
 
+    this.diffX = 0; //used to identify how much the thing moved last update
+    this.diffY = 0; //used to identify how much the thing moved last update
+
     this.viewData = [0];
     this.data = {};
     this.changeList = [];
@@ -46,6 +49,8 @@ CanvasModel.prototype.notifyObservers = function() {
     this.changedClients = [];
     this.removedClients = [];
     this.minimapData.clearChangeList();
+    this.diffX = 0;
+    this.diffY = 0;
 
 };
 
@@ -122,6 +127,22 @@ CanvasModel.prototype._addAllLocalCellsToChangeList = function() {
 };
 
 CanvasModel.prototype.setPosition = function (x, y) {
+
+    this.x = x;
+    this.y = y;
+
+    if (this.connection !== null) {
+        this.connection.sendMoveUpdate(this.x, this.y, this.width, this.height);
+    }
+
+    this.notifyObservers();
+};
+
+CanvasModel.prototype.setPositionAndJump = function (x, y) {
+
+    this.diffX = x - this.x;
+    this.diffY = y - this.y;
+
     this.x = x;
     this.y = y;
 

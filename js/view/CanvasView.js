@@ -4,9 +4,10 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.moveX = 0.0;
     this.moveY = 0.0;
 
+
     //for click'n'drag selection of squares
     this.mouseDownInInteractive = false;
-    this.previousCellValue;
+    this.previousCellValue = null;
 
     //Factory needs parameters
     this.cellSize = 32;
@@ -105,10 +106,18 @@ CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
 };
 
 //Notification from model
-CanvasView.prototype.update = function (model) {
+CanvasView.prototype.update = function(model) {
     var self = this;
 
-    model.changedClients.forEach(function (client) {
+    if (model.diffX !== 0 || model.diffY !== 0) {
+        var dX = model.diffX * this.cellSize;
+        var dY = model.diffY * this.cellSize;
+
+        this.moveX -= dX;
+        this.moveY -= dY;
+    }
+
+    model.changedClients.forEach(function(client) {
         var ball = self.clientBalls[client.id];
 
         if (ball === undefined) {
@@ -146,15 +155,14 @@ CanvasView.prototype.onMouseDown = function(data) {
 CanvasView.prototype.onMouseMove = function(data) {
     
     if(this.overlayContainer.isInsideInteractive(data.global.x, data.global.y) && this.mouseDownInInteractive){
-        
         var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
         var cellValue = this.model.getCell(globalPos.x, globalPos.y);
         //drag and delete the cells that are the same as inicially clicked color
         if (this.previousCellValue == this.model.getInstrNr() && cellValue == this.model.getInstrNr()) {
             this.model.setCell(globalPos.x, globalPos.y, 0);
-        } 
+        }
         //drag and set the cells to inically clicked color/instrument
-        if(this.previousCellValue != this.model.getInstrNr() && cellValue != this.model.getInstrNr()) {
+        if (this.previousCellValue != this.model.getInstrNr() && cellValue != this.model.getInstrNr()) {
             this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
         }
         this.model.notifyObservers();
@@ -177,7 +185,7 @@ CanvasView.prototype.onDragStart = function(point) {
 
 }
 
-CanvasView.prototype.onDragMove = function (point, move) {
+CanvasView.prototype.onDragMove = function(point, move) {
     this.cellContainer.spriteBatchContainer.position.x += move.x;
     this.cellContainer.spriteBatchContainer.position.y += move.y;
 
@@ -211,6 +219,7 @@ CanvasView.prototype.onDragStop = function(point, move) {
         this.overlayContainer.x + diffX,
         this.overlayContainer.y + diffY);
 
+
     this.model.setPosition(globalPos.x, globalPos.y);
 }
 
@@ -240,3 +249,5 @@ CanvasView.prototype._offsetSpriteBatchAndBackground = function() {
     this.clientBallContainer.position.y -= moveY;
 
 };
+
+//WARNING! this should not be here, should be refactored somewhere else FOR SURE

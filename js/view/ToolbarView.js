@@ -8,12 +8,12 @@ var ToolbarView = function(view, audioModel, model){
 
 ToolbarView.prototype.load = function(){    
     var view = this;
-    this.selInstr = 1;
-    this.model.setInstrNr(this.selInstr);
     view.guitar = true;
     view.glockenspiel = false;
     view.piano = false;
     view.drum = false;
-    
+
+    view.delay = 200;
+
     view.gui = new dat.GUI();
 }

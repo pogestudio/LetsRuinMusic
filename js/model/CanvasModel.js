@@ -2,8 +2,8 @@ var CanvasModel = function() {
     this.observers = [];
     this.x = 0;
     this.y = 0;
-    this.width = 1;
-    this.height = 1;
+    this.width = 16;
+    this.height = 16;
 
     this.viewData = [0];
     this.data = {};
@@ -154,9 +154,28 @@ CanvasModel.prototype._addAllLocalCellsToChangeList = function() {
     }
 };
 
+CanvasModel.prototype.setPosition = function (x, y) {
+    this.x = x;
+    this.y = y;
 
+    if (this.connection !== null) {
+        this.connection.sendMoveUpdate(this.x, this.y, this.width, this.height);
+    }
+}
 
 CanvasModel.prototype.setSize = function(width, height) {
     this.width = width;
     this.height = height;
+
+    if (this.connection !== null) {
+        this.connection.sendMoveUpdate(this.x, this.y, this.width, this.height);
+    }
 };
+
+CanvasModel.prototype.setName = function (name) {
+    this.name = name;
+    
+    if (this.connection !== null) {
+        this.connection.sendNameUpdate(this.name);
+    }
+}

@@ -4,7 +4,7 @@ $(function() {
     var model = new CanvasModel();
     //We instantiate our audioModel
     var audioModel = new AudioModel();
-    model.setSize(48, 48);
+    model.setSize(16, 16);
 
     //Test data
   //  model.setCell(2, 2, 1);
@@ -56,6 +56,7 @@ $(function() {
     var toolbarViewController = new ToolbarViewController(toolbarView, audioModel, model);
 
     var connection = new Connection(model);
+    //connection.connect("ws://192.168.1.101:12001");
     connection.connect("ws://qazeh.no-ip.info:12001");
     model.connection = connection;
 

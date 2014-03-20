@@ -22,10 +22,13 @@ Connection.prototype.connect = function (host) {
     this.socket.onopen = function (event) {
         var helloData = {};
         helloData.name = connection.model.name;
-        helloData.x = connection.model.x;
-        helloData.y = connection.model.y;
-        helloData.w = connection.model.width;
-        helloData.h = connection.model.height;
+        var view = {
+            x : connection.model.x,
+            y : connection.model.y,
+            w : connection.model.width,
+            h : connection.model.height,
+        };
+        helloData.view = view;
         helloData.data = [];
 
         //console.log(JSON.stringify(helloData));
@@ -43,9 +46,11 @@ Connection.prototype.connect = function (host) {
     this.socket.onmessage = function (event) {
         //console.log(event.data);
         var message = JSON.parse(event.data);
-        message.data.forEach(function (cell) {
-            connection.model.setCellFromServer(cell.x, cell.y, cell.v);
-        });
+        if (message.data !== undefined) {
+            message.data.forEach(function (cell) {
+                connection.model.setCellFromServer(cell.x, cell.y, cell.v);
+            });
+        }
         connection.model.notifyObservers();
     }
 }
@@ -61,6 +66,28 @@ Connection.prototype.sendUpdate = function (x, y, value) {
     this.trySendBuffer();
 }
 
+Connection.prototype.sendMoveUpdate = function (x, y, w, h) {
+    if (this.socket !== null && this.socket.readyState == 1) {
+        var msg = {
+            view: {
+                x: x,
+                y: y,
+                w: w,
+                h: h
+            }
+        };
+        this.socket.send(JSON.stringify(msg));
+    }
+}
+
+Connection.prototype.sendNameUpdate = function (name) {
+    if (this.socket !== null && this.socket.readyState == 1) {
+        var msg = {
+            name: name
+        };
+        this.socket.send(JSON.stringify(msg));
+    }
+}
 
 Connection.prototype.trySendBuffer = function () {
     if (this.socket !== null && this.socket.readyState == 1) {

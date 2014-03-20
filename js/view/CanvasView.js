@@ -135,6 +135,6 @@ CanvasView.prototype.onDragStop = function (point, move) {
         this.overlayContainer.x + diffX,
         this.overlayContainer.y + diffY);
 
-    this.model.x = globalPos.x;
-    this.model.y = globalPos.y;
+    this.model.setPosition(globalPos.x, globalPos.y);
+ 
 }

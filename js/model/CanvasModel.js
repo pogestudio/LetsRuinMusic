@@ -1,9 +1,9 @@
 var CanvasModel = function() {
     this.observers = [];
-    this.x = 0;
-    this.y = 0;
     this.width = 16;
     this.height = 16;
+    this.x = 0;
+    this.y = 0;
 
     this.viewData = [0];
     this.data = {};
@@ -15,6 +15,7 @@ var CanvasModel = function() {
 
     //Params: Values per cell, width(cells), height(cell)
     this.minimapData = new MinimapData(2, 50, 50);
+
 };
 
 CanvasModel.prototype.setInstrNr = function(number) {
@@ -161,7 +162,9 @@ CanvasModel.prototype.setPosition = function (x, y) {
     if (this.connection !== null) {
         this.connection.sendMoveUpdate(this.x, this.y, this.width, this.height);
     }
-}
+
+    this.notifyObservers();
+};
 
 CanvasModel.prototype.setSize = function(width, height) {
     this.width = width;
@@ -178,4 +181,6 @@ CanvasModel.prototype.setName = function (name) {
     if (this.connection !== null) {
         this.connection.sendNameUpdate(this.name);
     }
-}
+};
+
+

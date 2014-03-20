@@ -42,6 +42,8 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.mouseDrag = new MouseDrag();
     this.mouseDrag.addListener(this);
 
+    //prepare sprite batch and background pos from URL
+    this._offsetSpriteBatchAndBackground();
     //Align overview at startup
     this.onDragStop(null, null);
 };
@@ -55,7 +57,7 @@ CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
 
     this.cellContainer.spriteBatchContainer.position.x += moveX;
     this.cellContainer.spriteBatchContainer.position.y += moveY;
- 
+
     this.background.tilingSprite.tilePosition.x += moveX;
     this.background.tilingSprite.tilePosition.y += moveY;
 
@@ -69,20 +71,18 @@ CanvasView.prototype.update = function(model) {
 };
 
 /////Mouse listeners/////
-CanvasView.prototype.onMouseDown = function (data) {
-  
+CanvasView.prototype.onMouseDown = function(data) {
+
     if (this.overlayContainer.isInsideInteractive(data.global.x, data.global.y)) {
         var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
         var cellValue = this.model.getCell(globalPos.x, globalPos.y);
         if (cellValue != 0) {
             this.model.setCell(globalPos.x, globalPos.y, 0);
-        }
-        else {
+        } else {
             this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
         }
         this.model.notifyObservers();
-    }
-    else {
+    } else {
         this.mouseDrag.onMouseDown(data.global);
     }
 };
@@ -112,7 +112,7 @@ CanvasView.prototype.onDragMove = function(point, move) {
     this.background.tilingSprite.tilePosition.y += move.y;
 }
 
-CanvasView.prototype.onDragStop = function (point, move) {
+CanvasView.prototype.onDragStop = function(point, move) {
     //TODO: Snap to overlay
     var diffX = (this.cellContainer.spriteBatchContainer.position.x - this.overlayContainer.x) % this.cellSize;
     var diffY = (this.cellContainer.spriteBatchContainer.position.y - this.overlayContainer.y) % this.cellSize;
@@ -122,7 +122,7 @@ CanvasView.prototype.onDragStop = function (point, move) {
 
     var otherDiffX = diffX - this.cellSize;
     var otherDiffY = diffY - this.cellSize;
-    
+
     if (diffX > -otherDiffX)
         diffX = otherDiffX;
     if (diffY > -otherDiffY)
@@ -136,5 +136,29 @@ CanvasView.prototype.onDragStop = function (point, move) {
         this.overlayContainer.y + diffY);
 
     this.model.setPosition(globalPos.x, globalPos.y);
- 
+
 }
+
+CanvasView.prototype._offsetSpriteBatchAndBackground = function() {
+
+    function gup(name) {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^/&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(window.location.href);
+        if (results == null)
+            return "";
+        else
+            return results[1];
+    }
+
+    var moveX = gup('xpos') * this.cellSize - this.overlayContainer.x;
+    var moveY = gup('ypos') * this.cellSize - this.overlayContainer.y;
+
+    this.cellContainer.spriteBatchContainer.position.x -= moveX;
+    this.cellContainer.spriteBatchContainer.position.y -= moveY;
+
+    this.background.tilingSprite.tilePosition.x -= moveX;
+    this.background.tilingSprite.tilePosition.y -= moveY;
+
+};

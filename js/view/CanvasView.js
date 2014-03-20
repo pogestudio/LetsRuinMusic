@@ -42,10 +42,15 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.mouseDrag = new MouseDrag();
     this.mouseDrag.addListener(this);
 
+    this.clientBallContainer = new PIXI.DisplayObjectContainer();
+    this.stage.addChild(this.clientBallContainer);
+    this.clientBalls = {};
+
     //prepare sprite batch and background pos from URL
     this._offsetSpriteBatchAndBackground();
     //Align overview at startup
     this.onDragStop(null, null);
+
 };
 
 CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
@@ -61,13 +66,28 @@ CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
     this.background.tilingSprite.tilePosition.x += moveX;
     this.background.tilingSprite.tilePosition.y += moveY;
 
+    this.clientBallContainer.position.x += moveX;
+    this.clientBallContainer.position.y += moveY;
+
     this.moveX -= moveX;
     this.moveY -= moveY;
 };
 
 //Notification from model
-CanvasView.prototype.update = function(model) {
+CanvasView.prototype.update = function (model) {
+    var self = this;
 
+    model.changedClients.forEach(function (client) {
+        var ball = self.clientBalls[client.id];
+
+        if (ball === undefined) {
+            var ball = new ClientBall(self.clientBallContainer);
+            self.clientBalls[client.id] = ball;
+        }
+
+        ball.sprite.x = (client.view.x + client.view.w * 0.5) * self.cellSize;
+        ball.sprite.y = (client.view.y + client.view.h * 0.5) * self.cellSize;
+    });
 };
 
 /////Mouse listeners/////
@@ -104,9 +124,12 @@ CanvasView.prototype.onDragStart = function(point) {
 
 }
 
-CanvasView.prototype.onDragMove = function(point, move) {
+CanvasView.prototype.onDragMove = function (point, move) {
     this.cellContainer.spriteBatchContainer.position.x += move.x;
     this.cellContainer.spriteBatchContainer.position.y += move.y;
+
+    this.clientBallContainer.position.x += move.x;
+    this.clientBallContainer.position.y += move.y;
 
     this.background.tilingSprite.tilePosition.x += move.x;
     this.background.tilingSprite.tilePosition.y += move.y;
@@ -136,7 +159,6 @@ CanvasView.prototype.onDragStop = function(point, move) {
         this.overlayContainer.y + diffY);
 
     this.model.setPosition(globalPos.x, globalPos.y);
-
 }
 
 CanvasView.prototype._offsetSpriteBatchAndBackground = function() {
@@ -160,5 +182,8 @@ CanvasView.prototype._offsetSpriteBatchAndBackground = function() {
 
     this.background.tilingSprite.tilePosition.x -= moveX;
     this.background.tilingSprite.tilePosition.y -= moveY;
+
+    this.clientBallContainer.position.x -= moveX;
+    this.clientBallContainer.position.y -= moveY;
 
 };

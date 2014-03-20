@@ -14,6 +14,5 @@ ToolbarView.prototype.load = function(){
     view.glockenspiel = false;
     view.piano = false;
     view.drum = false;
-    
     view.gui = new dat.GUI();
 }

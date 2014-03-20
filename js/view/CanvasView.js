@@ -4,6 +4,11 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     this.moveX = 0.0;
     this.moveY = 0.0;
 
+    //for click'n'drag selection of squares
+    this.mouseDownInInteractive = false;
+    this.previousCellValue;
+
+
     //Factory needs parameters
     this.cellSize = 32;
     var borderSize = 1;
@@ -74,8 +79,11 @@ CanvasView.prototype.update = function(model) {
 CanvasView.prototype.onMouseDown = function(data) {
 
     if (this.overlayContainer.isInsideInteractive(data.global.x, data.global.y)) {
+
+        this.mouseDownInInteractive = true;
         var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
         var cellValue = this.model.getCell(globalPos.x, globalPos.y);
+        this.previousCellValue = cellValue;
         if (cellValue != 0) {
             this.model.setCell(globalPos.x, globalPos.y, 0);
         } else {
@@ -88,6 +96,23 @@ CanvasView.prototype.onMouseDown = function(data) {
 };
 
 CanvasView.prototype.onMouseMove = function(data) {
+    
+    if(this.mouseDownInInteractive){
+        
+        var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
+        var cellValue = this.model.getCell(globalPos.x, globalPos.y);
+        //drag and delete the cells that are the same as inicially clicked color
+        if (this.previousCellValue == this.model.getInstrNr() && cellValue == this.model.getInstrNr()) {
+            this.model.setCell(globalPos.x, globalPos.y, 0);
+        } 
+        //drag and set the cells to inically clicked color/instrument
+        if(this.previousCellValue != this.model.getInstrNr() && cellValue != this.model.getInstrNr()) {
+            this.model.setCell(globalPos.x, globalPos.y, this.model.getInstrNr());
+        }
+
+        this.model.notifyObservers();
+    }
+
     if (data.originalEvent.which != 0)
         this.mouseDrag.onMouseMove(data.global);
     else
@@ -96,6 +121,7 @@ CanvasView.prototype.onMouseMove = function(data) {
 
 CanvasView.prototype.onMouseUp = function(data) {
     this.mouseDrag.onMouseUp(data.global);
+    this.mouseDownInInteractive = false;
 }
 
 /////Dragging stuff/////

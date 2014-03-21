@@ -30,16 +30,24 @@ AudioViewController.prototype.loadInstrument = function() {
     MIDI.loadPlugin({
         soundfontUrl: "././soundfont/",
         instruments: this.audioModel.getInstrNameList(),
-        callback: avc.initInterval,
+        callback: avc.initIntervalCloseLoading,
         source: this,
     });
 }
 
-AudioViewController.prototype.initInterval = function() {
+AudioViewController.prototype.initIntervalCloseLoading = function() {
     var AudioViewController = this.source;
     AudioViewController.interval = setInterval(function() {
         AudioViewController.updateSoundY();
     }, AudioViewController.duration);
+
+    this.closeLoadingScreen();
+}
+
+AudioViewController.prototype.closeLoadingScreen = function(){
+ for (var i = 0; i < this.observers.length; i++) {
+        this.observers[i].closeInstructions(x, y);
+    }
 }
 
 AudioViewController.prototype.changeTempo = function(value) {

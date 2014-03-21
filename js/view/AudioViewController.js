@@ -12,10 +12,15 @@ var AudioViewController = function(model, audioModel) {
     this.changeDuration = false;
 
     this.observers = [];
+    this.observersLoadScreen = [];
 }
 
 AudioViewController.prototype.addObserver = function(observer) {
     this.observers.push(observer);
+}
+
+AudioViewController.prototype.addObserverOfLoading = function(observer) {
+    this.observersLoadScreen.push(observer);
 }
 
 
@@ -40,13 +45,12 @@ AudioViewController.prototype.initIntervalCloseLoading = function() {
     AudioViewController.interval = setInterval(function() {
         AudioViewController.updateSoundY();
     }, AudioViewController.duration);
-
-    this.closeLoadingScreen();
+    AudioViewController.closeLoadingScreen();
 }
 
 AudioViewController.prototype.closeLoadingScreen = function(){
- for (var i = 0; i < this.observers.length; i++) {
-        this.observers[i].closeInstructions(x, y);
+ for (var i = 0; i < this.observersLoadScreen.length; i++) {
+        this.observersLoadScreen[i].loadingFinished();
     }
 }
 

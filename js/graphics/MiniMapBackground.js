@@ -28,7 +28,8 @@ MiniMapBackground.prototype.navigateAway = function(globalX, globalY) {
     //if it's more Y, thn he should go down
     var stepsToGoDown = globalY - miniMapOffset;
 
-    var newX = this.model.x + stepsToGoRight;
-    var newY = this.model.y + stepsToGoDown;
+    var newX = Math.floor(this.model.x + stepsToGoRight);
+    var newY = Math.floor(this.model.y + stepsToGoDown);
+
     this.model.setPositionAndJump(newX,newY);
 };

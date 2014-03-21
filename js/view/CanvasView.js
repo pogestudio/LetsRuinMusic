@@ -17,7 +17,7 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     //keyevents
     var self = this;
 
-    window.addEventListener('keyup', function (e) {
+    window.addEventListener('keydown', function (e) {
         var currentXpos = self.model.x;
         var currentYpos = self.model.y;
 

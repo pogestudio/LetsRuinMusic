@@ -54,7 +54,6 @@ ToolbarViewController.prototype.loadControls = function(){
 ToolbarViewController.prototype.update = function(model) { 
     this.view.posx = this.model.x;
     this.view.posy = this.model.y;
-    console.log("update");
 };
 
 

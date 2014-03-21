@@ -47,6 +47,14 @@ AudioViewController.prototype.initInterval = function() {
     AudioViewController.interval = setInterval(function() {
         AudioViewController.updateSoundY();
     }, AudioViewController.duration);
+
+    closeLoadingScreen();
+}
+
+AudioViewController.prototype.closeLoadingScreen = function(){
+ for (var i = 0; i < this.observers.length; i++) {
+        this.observers[i].closeInstructions(x, y);
+    }
 }
 
 AudioViewController.prototype.changeTempo = function(value) {

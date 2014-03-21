@@ -5,20 +5,21 @@ var MiniMapView = function(model, rendererContainer) {
     this.cellSize = 1;
     var borderSize = 0;
 
-    this.cellFactory = new MiniMapCellFactory(this.cellSize, borderSize);
-
     this.miniMapSize = 300;
 
     var miniMapTileBackground = new MiniMapBackground(model, this.miniMapSize + 1);
     rendererContainer.stage.addChild(miniMapTileBackground.graphics);
     rendererContainer.addFrameListener(this);
 
-    var pixiSpriteBatchContainer = new PIXI.SpriteBatch();
-    rendererContainer.stage.addChild(pixiSpriteBatchContainer);
+    var miniMapSpriteContainer = new PIXI.DisplayObjectContainer();
+    this.stage.addChild(miniMapSpriteContainer);
+
+    this.cellFactory = new MiniMapCellFactory(this.cellSize);
 
     var isMiniMapView = true;
-    this.cellContainer = new CellContainer(this.cellFactory, model, null, pixiSpriteBatchContainer, isMiniMapView);
+    this.cellContainer = new CellContainer(this.cellFactory, model, null, miniMapSpriteContainer, isMiniMapView);
     this.cellContainer.minimapInfo.miniMapSize = this.miniMapSize;
+    this.cellContainer.cellMask = miniMapTileBackground.graphics;
 
     model.addObserver(this);
 
@@ -64,8 +65,8 @@ MiniMapView.prototype.update = function(model) {
             otherPlayer.setPos(client.view.x, client.view.y, model.x, model.y, self.miniMapSize);
         }
 
-            otherPlayer.moveTo(client.view.x, client.view.y, model.x, model.y, self.miniMapSize);
-            otherPlayer.sprite.visible = self.otherPlayerShouldShowInMiniMap(client, model);
+        otherPlayer.moveTo(client.view.x, client.view.y, model.x, model.y, self.miniMapSize);
+        otherPlayer.sprite.visible = self.otherPlayerShouldShowInMiniMap(client, model);
     });
 
     model.removedClients.forEach(function(client) {

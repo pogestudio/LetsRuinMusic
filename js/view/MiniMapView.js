@@ -57,6 +57,7 @@ MiniMapView.prototype.update = function(model) {
         for (var i in this.otherPlayers) {
             var aPlayer = this.otherPlayers[i];
             aPlayer.moveTo(aPlayer.x, aPlayer.y, model.x, model.y, self.miniMapSize);
+            aPlayer.sprite.visible = self.otherPlayerShouldShowInMiniMap(aPlayer.x,aPlayer.y, model);
         }
     };
 
@@ -75,7 +76,7 @@ MiniMapView.prototype.update = function(model) {
         }
 
         otherPlayer.moveTo(client.view.x, client.view.y, model.x, model.y, self.miniMapSize);
-        otherPlayer.sprite.visible = self.otherPlayerShouldShowInMiniMap(client, model);
+        otherPlayer.sprite.visible = self.otherPlayerShouldShowInMiniMap(client.view.x,client.view.y, model);
     });
 
     model.removedClients.forEach(function(client) {
@@ -87,11 +88,11 @@ MiniMapView.prototype.update = function(model) {
     });
 };
 
-MiniMapView.prototype.otherPlayerShouldShowInMiniMap = function(client, model) {
+MiniMapView.prototype.otherPlayerShouldShowInMiniMap = function(clientX,clientY, model) {
     var acceptableRangeFromUser = this.miniMapSize / 2;
     var distanceFromUser = {
-        x: client.view.x - model.x,
-        y: client.view.y - model.y,
+        x: clientX - model.x,
+        y: clientY - model.y,
     };
     var shouldShow = Math.abs(distanceFromUser.x) < acceptableRangeFromUser && Math.abs(distanceFromUser.y) < acceptableRangeFromUser;
 

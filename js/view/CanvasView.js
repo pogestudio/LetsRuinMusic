@@ -17,11 +17,11 @@ var CanvasView = function(containerDiv, model, rendererContainer, audioViewContr
     //keyevents
     var self = this;
 
-    window.addEventListener('keydown', function (e) {
+    window.addEventListener('keydown', function(e) {
         var currentXpos = self.model.x;
         var currentYpos = self.model.y;
 
-        switch(e.keyCode){
+        switch (e.keyCode) {
             case 87:
                 self.moveY += self.cellSize;
                 self.model.setPosition(currentXpos, currentYpos - 1);
@@ -105,7 +105,7 @@ CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
 
     for (var i in this.clientBalls) {
         var ball = this.clientBalls[i];
-        ball.update(timeStep)
+        ball.onFrameUpdate(timeStep);
     }
 };
 
@@ -113,6 +113,8 @@ CanvasView.prototype.onFrameRender = function(renderContainer, timeStep) {
 CanvasView.prototype.update = function(model) {
     var self = this;
 
+
+    //deal with quick moves!
     if (model.diffX !== 0 || model.diffY !== 0) {
         var dX = model.diffX * this.cellSize;
         var dY = model.diffY * this.cellSize;
@@ -121,22 +123,22 @@ CanvasView.prototype.update = function(model) {
         this.moveY -= dY;
     }
 
-    model.changedClients.forEach(function (client) {
+    model.changedClients.forEach(function(client) {
         if (client.id == model.id)
             return;
 
         var ball = self.clientBalls[client.id];
 
         if (ball === undefined) {
-            var ball = new ClientBall(self.clientBallContainer, client.color, self.cellSize);
+            ball = new ClientBall(self.clientBallContainer, client.color, self.cellSize);
             self.clientBalls[client.id] = ball;
             ball.setPos(client.view.x, client.view.y, client.view.w, client.view.h);
+        } else {
+            ball.moveTo(client.view.x, client.view.y, client.view.w, client.view.h);
         }
-
-        ball.moveTo(client.view.x, client.view.y, client.view.w, client.view.h);
     });
-    
-    model.removedClients.forEach(function (client) {
+
+    model.removedClients.forEach(function(client) {
         var ball = self.clientBalls[client.id];
         if (ball != null) {
             ball.destroy(self.clientBallContainer);
@@ -168,8 +170,8 @@ CanvasView.prototype.onMouseDown = function(data) {
 };
 
 CanvasView.prototype.onMouseMove = function(data) {
-    
-    if(this.overlayContainer.isInsideInteractive(data.global.x, data.global.y) && this.mouseDownInInteractive){
+
+    if (this.overlayContainer.isInsideInteractive(data.global.x, data.global.y) && this.mouseDownInInteractive) {
         var globalPos = this.cellContainer.getGlobalPosFromScreenPos(data.global.x, data.global.y);
         var cellValue = this.model.getCell(globalPos.x, globalPos.y);
         //drag and delete the cells that are the same as inicially clicked color

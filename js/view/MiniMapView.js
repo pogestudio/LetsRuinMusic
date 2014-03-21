@@ -8,7 +8,7 @@ var MiniMapView = function(model, rendererContainer) {
     this.cellFactory = new MiniMapCellFactory(cellSize, borderSize);
 
     var miniMapTileBackground = new MiniMapBackground(model,300);
-    rendererContainer.stage.addChild(miniMapTileBackground.tileSprite);
+    rendererContainer.stage.addChild(miniMapTileBackground.graphics);
     
     var pixiSpriteBatchContainer = new PIXI.SpriteBatch();
     rendererContainer.stage.addChild(pixiSpriteBatchContainer);

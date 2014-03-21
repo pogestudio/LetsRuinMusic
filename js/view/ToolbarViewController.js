@@ -49,13 +49,14 @@ ToolbarViewController.prototype.loadControls = function(){
     this.view.CB4Controller.onChange(function(value){
         cont.teleport(1, value);
     });
+
+    this.view.CB5Controller= this.view.gui.add(this.view, "share");
 }
 
 ToolbarViewController.prototype.update = function(model) { 
     this.view.posx = this.model.x;
     this.view.posy = this.model.y;
 };
-
 
 
 ToolbarViewController.prototype.teleport = function (axis, value){

@@ -12,5 +12,8 @@ ToolbarView.prototype.load = function(){
     this.delay = 300;
     this.posx = this.model.x.toString();
     this.posy = this.model.y.toString();
+    this.share = location.href;
     this.gui = new dat.GUI();
 }
+
+

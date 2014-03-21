@@ -9,7 +9,7 @@ var MiniMapView = function(model, rendererContainer) {
 
     this.miniMapSize = 300;
 
-    var miniMapTileBackground = new MiniMapBackground(model, this.miniMapSize);
+    var miniMapTileBackground = new MiniMapBackground(model, this.miniMapSize + 1);
     rendererContainer.stage.addChild(miniMapTileBackground.graphics);
     rendererContainer.addFrameListener(this);
 

@@ -33,6 +33,7 @@ AudioViewController.prototype.loadInstrument = function() {
         callback: avc.initIntervalCloseLoading,
         source: this,
     });
+
 }
 
 AudioViewController.prototype.initIntervalCloseLoading = function() {
@@ -42,6 +43,7 @@ AudioViewController.prototype.initIntervalCloseLoading = function() {
     }, AudioViewController.duration);
 
     this.closeLoadingScreen();
+
 }
 
 AudioViewController.prototype.closeLoadingScreen = function(){

@@ -2,7 +2,7 @@
 var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
 
     this.minimapInfo = {
-        miniMapSize: 300,
+        miniMapSize: 0,
         prevX: -1,
         prevY: -1
     };
@@ -180,7 +180,7 @@ CellContainer.prototype.userMovedPosition = function(model) {
 
 CellContainer.prototype.updateMiniMap = function(model) {
 
-    this.minimapInfo.centerMappOffset = this.minimapInfo.miniMapSize / 4 + 16; //16 MAGIC NUMBER? wtf this is weird
+    this.minimapInfo.centerMappOffset = this.minimapInfo.miniMapSize / 3;// / 4 + 16; //16 MAGIC NUMBER? wtf this is weird
     //if the position has changed
 
     //offset the spritebatchcontainer
@@ -211,5 +211,5 @@ CellContainer.prototype._miniMapCellShouldBeVisible = function(cellX, cellY, use
     var startY = userY - cellOffset;
     var endY = userY + cellOffset;
 
-    return (startX <= cellX && cellX <= endX) && (startY <= cellY && cellY <= endY);
+    return (startX < cellX && cellX < endX) && (startY < cellY && cellY < endY);
 };

@@ -45,7 +45,7 @@ ClientBall.prototype.destroy = function (container) {
     container.removeChild(this.cornerBR);
 };
 
-ClientBall.prototype.update = function (timeStep) {
+ClientBall.prototype.onFrameUpdate = function (timeStep) {
     this.sprite.x += (this.sprite.tx - this.sprite.x) * timeStep * 6;
     this.sprite.y += (this.sprite.ty - this.sprite.y) * timeStep * 6;
 

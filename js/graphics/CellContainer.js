@@ -88,7 +88,6 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
         }
 
         cell = this.cellFactory.createCell(globalX, globalY, this.spriteBatchContainer, imgPath);
-        this._updateCellVisibleStatus(cell);
 
         var xlist = this.data[globalY];
         if (xlist === undefined) {
@@ -97,7 +96,10 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
         }
         xlist[globalX] = cell;
     }
-
+    if(this.isForMiniMap)
+    {
+        this._updateMiniMapCellVisibleStatus(cell);
+    }
     cell.setValue(value);
 };
 
@@ -197,13 +199,13 @@ CellContainer.prototype.updateMiniMap = function(model) {
         for (var xKey in xList) {
 
             var cell = xList[xKey];
-            this._updateCellVisibleStatus(cell);
+            this._updateMiniMapCellVisibleStatus(cell);
             //cell.sprite.visible = this._miniMapCellShouldBeVisible(xKey, yKey, userPosX, userPosY);
         }
     }
 };
-CellContainer.prototype._updateCellVisibleStatus = function(cell) {
-    cell.sprite.visible = this._miniMapCellShouldBeVisible(cell.x, cell.y, this.model.x, this.model.y);
+CellContainer.prototype._updateMiniMapCellVisibleStatus = function(cell) {
+    cell.sprite.alpha = this._miniMapCellShouldBeVisible(cell.x, cell.y, this.model.x, this.model.y) ? 1 : 0;
 };
 
 CellContainer.prototype._miniMapCellShouldBeVisible = function(cellX, cellY, userX, userY) {
@@ -215,5 +217,8 @@ CellContainer.prototype._miniMapCellShouldBeVisible = function(cellX, cellY, use
     var startY = userY - cellOffset;
     var endY = userY + cellOffset;
 
-    return (startX < cellX && cellX < endX) && (startY < cellY && cellY < endY);
+    var xOK = (startX < cellX && cellX < endX);
+    var yOK = (startY < cellY && cellY < endY);
+
+    return  xOK && yOK;
 };

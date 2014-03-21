@@ -11,7 +11,7 @@ var MiniMapView = function(model, rendererContainer) {
     rendererContainer.stage.addChild(miniMapTileBackground.graphics);
     rendererContainer.addFrameListener(this);
 
-    var miniMapSpriteContainer = new PIXI.DisplayObjectContainer();
+    var miniMapSpriteContainer = new PIXI.SpriteBatch();
     this.stage.addChild(miniMapSpriteContainer);
 
     this.cellFactory = new MiniMapCellFactory(this.cellSize);
@@ -53,6 +53,13 @@ MiniMapView.prototype.update = function(model) {
 
     var self = this;
 
+    if (model.playerDidMove) {
+        for (var i in this.otherPlayers) {
+            var aPlayer = this.otherPlayers[i];
+            aPlayer.moveTo(aPlayer.x, aPlayer.y, model.x, model.y, self.miniMapSize);
+        }
+    };
+
     model.changedClients.forEach(function(client) {
         if (client.id == model.id)
             return;
@@ -63,6 +70,8 @@ MiniMapView.prototype.update = function(model) {
             otherPlayer = new ClientBallMiniMap(self.otherPlayerContainer, client.color, self.cellSize);
             self.otherPlayers[client.id] = otherPlayer;
             otherPlayer.setPos(client.view.x, client.view.y, model.x, model.y, self.miniMapSize);
+            otherPlayer.x = client.view.x;
+            otherPlayer.y = client.view.y; //save so we can use it in the loop above, so they stay in the same place when we move around ourselves
         }
 
         otherPlayer.moveTo(client.view.x, client.view.y, model.x, model.y, self.miniMapSize);

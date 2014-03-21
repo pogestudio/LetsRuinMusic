@@ -32,5 +32,5 @@ MiniMapCell.prototype.isAnimationDone = function() {
 
 MiniMapCell.prototype.setValue = function(value) {
     this.value = value;
-    this.sprite.alpha = value > 0 ? 1 : 0;
+    //this.sprite.alpha = value > 0 ? 1 : 0;
 };

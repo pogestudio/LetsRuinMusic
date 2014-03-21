@@ -4,6 +4,7 @@ var CanvasModel = function() {
     this.height = 16;
     this.x = 0;
     this.y = 0;
+    this.playerDidMove = false;
 
     this.diffX = 0; //used to identify how much the thing moved last update
     this.diffY = 0; //used to identify how much the thing moved last update
@@ -51,6 +52,7 @@ CanvasModel.prototype.notifyObservers = function() {
     this.minimapData.clearChangeList();
     this.diffX = 0;
     this.diffY = 0;
+    this.playerDidMove = false;
 
 };
 
@@ -130,6 +132,7 @@ CanvasModel.prototype.setPosition = function (x, y) {
 
     this.x = x;
     this.y = y;
+    this.playerDidMove = true;
 
     if (this.connection !== null) {
         this.connection.sendMoveUpdate(this.x, this.y, this.width, this.height);
@@ -140,6 +143,7 @@ CanvasModel.prototype.setPosition = function (x, y) {
 
 CanvasModel.prototype.setPositionAndJump = function (x, y) {
 
+    this.playerDidMove = true;
     this.diffX = x - this.x;
     this.diffY = y - this.y;
 

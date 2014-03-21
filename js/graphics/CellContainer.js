@@ -1,5 +1,6 @@
-
 var CellContainer = function(cellFactory, model, audioViewController, pixiSpriteBatchContainer, isForMiniMap) {
+
+    this.model = model;
 
     this.minimapInfo = {
         miniMapSize: 0,
@@ -30,11 +31,6 @@ CellContainer.prototype.update = function(model) {
 
     if (this.isForMiniMap) {
         changeList = model.minimapData.changeList;
-
-        if (this.userMovedPosition(model)) {
-            this.updateMiniMap(model);
-        }
-
     } else {
         changeList = model.changeList;
     }
@@ -43,6 +39,10 @@ CellContainer.prototype.update = function(model) {
     changeList.forEach(function(entry) {
         self.setCell(entry.x, entry.y, entry.value);
     });
+
+    if (this.isForMiniMap && this.userMovedPosition(model)) {
+        this.updateMiniMap(model);
+    }
 };
 
 CellContainer.prototype.setCell = function(globalX, globalY, value) {
@@ -83,11 +83,12 @@ CellContainer.prototype.setCell = function(globalX, globalY, value) {
     }
 
     if (cell.value != value) {
-        if(cell.value != 0) {
-            this.deleteCell(globalX,globalY);
+        if (cell.value != 0) {
+            this.deleteCell(globalX, globalY);
         }
-        
+
         cell = this.cellFactory.createCell(globalX, globalY, this.spriteBatchContainer, imgPath);
+        this._updateCellVisibleStatus(cell);
 
         var xlist = this.data[globalY];
         if (xlist === undefined) {
@@ -180,7 +181,7 @@ CellContainer.prototype.userMovedPosition = function(model) {
 
 CellContainer.prototype.updateMiniMap = function(model) {
 
-    this.minimapInfo.centerMappOffset = this.minimapInfo.miniMapSize / 3;// / 4 + 16; //16 MAGIC NUMBER? wtf this is weird
+    this.minimapInfo.centerMappOffset = this.minimapInfo.miniMapSize / 3; // / 4 + 16; //16 MAGIC NUMBER? wtf this is weird
     //if the position has changed
 
     //offset the spritebatchcontainer
@@ -196,10 +197,13 @@ CellContainer.prototype.updateMiniMap = function(model) {
         for (var xKey in xList) {
 
             var cell = xList[xKey];
-            var alpha = this._miniMapCellShouldBeVisible(xKey, yKey, userPosX, userPosY) ? 1 : 0;
-            cell.sprite.alpha = alpha;
+            this._updateCellVisibleStatus(cell);
+            //cell.sprite.visible = this._miniMapCellShouldBeVisible(xKey, yKey, userPosX, userPosY);
         }
     }
+};
+CellContainer.prototype._updateCellVisibleStatus = function(cell) {
+    cell.sprite.visible = this._miniMapCellShouldBeVisible(cell.x, cell.y, this.model.x, this.model.y);
 };
 
 CellContainer.prototype._miniMapCellShouldBeVisible = function(cellX, cellY, userX, userY) {

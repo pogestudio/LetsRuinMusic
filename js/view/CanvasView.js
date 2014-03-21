@@ -133,9 +133,9 @@ CanvasView.prototype.update = function(model) {
             ball = new ClientBall(self.clientBallContainer, client.color, self.cellSize);
             self.clientBalls[client.id] = ball;
             ball.setPos(client.view.x, client.view.y, client.view.w, client.view.h);
-        } else {
+        } 
             ball.moveTo(client.view.x, client.view.y, client.view.w, client.view.h);
-        }
+        
     });
 
     model.removedClients.forEach(function(client) {

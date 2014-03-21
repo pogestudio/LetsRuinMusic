@@ -6,24 +6,24 @@ var ClientBall = function (container, color, cellSize) {
     this.sprite = new PIXI.Sprite.fromImage("images/big-client-ball.png");
     this.sprite.anchor.x = 0.5;
     this.sprite.anchor.y = 0.5;
-    this.sprite.alpha = 0.2;
+    this.sprite.alpha = 0.5;
     this.sprite.tint = color;
 
     container.addChild(this.sprite);
 
     this.cornerTL = new PIXI.Sprite.fromImage("images/corner.png");
     this.cornerTL.rotation = 0;
-    this.cornerTL.alpha = 0.15;
+    this.cornerTL.alpha = 0.2;
     this.cornerTL.tint = color;
 
     this.cornerTR = new PIXI.Sprite.fromImage("images/corner.png");
     this.cornerTR.rotation = Math.PI * 0.5;
-    this.cornerTR.alpha = 0.15;
+    this.cornerTR.alpha = 0.2;
     this.cornerTR.tint = color;
 
     this.cornerBL = new PIXI.Sprite.fromImage("images/corner.png");
     this.cornerBL.rotation = Math.PI * 1.5;
-    this.cornerBL.alpha = 0.15;
+    this.cornerBL.alpha = 0.2;
     this.cornerBL.tint = color;
 
     this.cornerBR = new PIXI.Sprite.fromImage("images/corner.png");

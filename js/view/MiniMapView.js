@@ -59,7 +59,7 @@ MiniMapView.prototype.update = function(model) {
         var otherPlayer = self.otherPlayers[client.id];
 
         if (otherPlayer === undefined) {
-            otherPlayer = new ClientBallMiniMap(self.otherPlayerContainer, client.color, this.cellSize);
+            otherPlayer = new ClientBallMiniMap(self.otherPlayerContainer, client.color, self.cellSize);
             self.otherPlayers[client.id] = otherPlayer;
             otherPlayer.setPos(client.view.x, client.view.y, model.x, model.y, self.miniMapSize);
         }

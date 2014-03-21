@@ -6,38 +6,6 @@ $(function() {
     var audioModel = new AudioModel();
     model.setSize(16, 16);
 
-    //Test data
-  //  model.setCell(2, 2, 1);
-   // model.setCell(5, 5, 1);
-   // model.setCell(3, 8, 1);
-    // model.setCell(19, 19, 1);
-    // model.setCell(20, 20, 1);
-    // model.setCell(24, 30, 1);
-    // model.setCell(22, 19, 1);
-    // model.setCell(29, 29, 1);
-    // model.setCell(30, 27, 1);
-    // model.setCell(21, 19, 1);
-    // model.setCell(26, 18, 1);
-    // model.setCell(24, 16, 1);
-    // model.setCell(27, 17, 1);
-    // model.setCell(28, 18, 1);
-    // model.setCell(29, 19, 1);
-    // model.setCell(30, 20, 1);
-    // model.setCell(31, 21, 1);
-    // model.setCell(32, 22, 1);
-    // model.setCell(17, 23, 1);
-    // model.setCell(18, 24, 1);
-
-    // model.setCell(28, 20, 2);
-
-    // model.setCell(29, 20, 4);
-    // model.setCell(30, 22, 4);
-    // model.setCell(31, 23, 4);
-    // model.setCell(32, 24, 4);
-    // model.setCell(17, 25, 4);
-    // model.setCell(18, 26, 4);
-
-
     var rendererContainer = new Renderer();
 
     var audioViewController = new AudioViewController(model, audioModel);
@@ -56,6 +24,9 @@ $(function() {
     var toolbarView = new ToolbarView($("#toolbarView"), model);
     var toolbarViewController = new ToolbarViewController(toolbarView, audioModel, model);
     toolbarViewController.addObserver(audioViewController);
+
+    var userInstructionsView = new UserInstructionsView($("#userInstructionsView"));
+    audioViewController.addObserverOfLoading(userInstructionsView);
 
     var connection = new Connection(model);
     //connection.connect("ws://192.168.1.101:12001");

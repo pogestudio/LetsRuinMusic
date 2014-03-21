@@ -41,7 +41,7 @@ AudioViewController.prototype.initIntervalCloseLoading = function() {
         AudioViewController.updateSoundY();
     }, AudioViewController.duration);
 
-    closeLoadingScreen();
+    this.closeLoadingScreen();
 }
 
 AudioViewController.prototype.closeLoadingScreen = function(){

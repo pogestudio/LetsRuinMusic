@@ -20,7 +20,7 @@ var MiniMapBackground = function(model, size) {
 };
 
 MiniMapBackground.prototype.navigateAway = function(globalX, globalY) {
-    var miniMapOffset = (this.size - 16) / 2;
+    var miniMapOffset = (this.size + 16) / 2;
 
     //if user clicks on (miniMapOffset,miniMapOffset), he hit right where he is.
     //if it's more X, then he should go right

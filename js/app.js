@@ -53,7 +53,7 @@ $(function() {
     var urlBarView = new UrlBarView(model);
     //var miniMapViewController = new MiniMapViewController(miniMapView, model);
 
-    var toolbarView = new ToolbarView($("#toolbarView"), audioModel, model);
+    var toolbarView = new ToolbarView($("#toolbarView"), model);
     var toolbarViewController = new ToolbarViewController(toolbarView, audioModel, model);
     toolbarViewController.addObserver(audioViewController);
 

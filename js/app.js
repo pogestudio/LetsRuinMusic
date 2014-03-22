@@ -18,6 +18,7 @@ $(function() {
 
     //And create the needed controllers and views
     var miniMapView = new MiniMapView(model, rendererContainer);
+    var miniMapViewController = new MiniMapViewController(model, miniMapView);
     var urlBarView = new UrlBarView(model);
     //var miniMapViewController = new MiniMapViewController(miniMapView, model);
 

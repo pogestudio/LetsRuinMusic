@@ -10,6 +10,7 @@ var MiniMapView = function(model, rendererContainer) {
     var miniMapTileBackground = new MiniMapBackground(model, this.miniMapSize + 1);
     rendererContainer.stage.addChild(miniMapTileBackground.graphics);
     rendererContainer.addFrameListener(this);
+    this.background = miniMapTileBackground;
 
     var miniMapSpriteContainer = new PIXI.SpriteBatch();
     this.stage.addChild(miniMapSpriteContainer);

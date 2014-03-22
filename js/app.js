@@ -12,7 +12,7 @@ $(function() {
 
     //And create the needed controllers and views
     var canvasView = new CanvasView($("#canvasView"), model, rendererContainer, audioViewController);
-    var canvasViewController = new CanvasViewController(canvasView, model);
+    var canvasViewController = new CanvasViewController(canvasView, model, rendererContainer);
 
     //audioViewController.addObserver(canvasView);
 

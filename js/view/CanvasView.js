@@ -144,3 +144,27 @@ CanvasView.prototype._offsetSpriteBatchAndBackground = function() {
     this.addPosition(-moveX, -moveY);
     
 };
+
+//Returns the distance from perfect alignment between the view area and the background
+CanvasView.prototype.getOverlayAlignmentDiff = function () {
+    var diffX = (this.cellContainer.spriteBatchContainer.position.x - this.overlayContainer.x + this.moveX) % this.cellSize;
+    var diffY = (this.cellContainer.spriteBatchContainer.position.y - this.overlayContainer.y + this.moveY) % this.cellSize;
+
+    diffX = (diffX + this.cellSize) % this.cellSize;
+    diffY = (diffY + this.cellSize) % this.cellSize;
+
+    var otherDiffX = diffX - this.cellSize;
+    var otherDiffY = diffY - this.cellSize;
+
+    if (diffX > -otherDiffX)
+        diffX = otherDiffX;
+    if (diffY > -otherDiffY)
+        diffY = otherDiffY;
+
+    return { x: diffX, y: diffY };
+};
+
+CanvasView.prototype.forceAlign = function () {
+    var diff = this.getOverlayAlignmentDiff();
+    this.addPosition(-diff.x, -diff.y);
+};

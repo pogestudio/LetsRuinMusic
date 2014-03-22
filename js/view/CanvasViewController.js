@@ -49,6 +49,13 @@ var CanvasViewController = function(view, model, rendererContainer) {
 
     //Align overview at startup
     this.onDragStop(null, null);
+
+    var self = this;
+    $(window).resize(function () {
+        self.view.overlayContainer.updateSize();
+        //self.view.forceAlign();
+        self.onDragStop();
+    });
 };
 
 
@@ -112,25 +119,12 @@ CanvasViewController.prototype.onDragMove = function (point, move) {
 }
 
 CanvasViewController.prototype.onDragStop = function (point, move) {
-    var diffX = (this.view.cellContainer.spriteBatchContainer.position.x - this.view.overlayContainer.x) % this.view.cellSize;
-    var diffY = (this.view.cellContainer.spriteBatchContainer.position.y - this.view.overlayContainer.y) % this.view.cellSize;
-
-    diffX = (diffX + this.view.cellSize) % this.view.cellSize;
-    diffY = (diffY + this.view.cellSize) % this.view.cellSize;
-
-    var otherDiffX = diffX - this.view.cellSize;
-    var otherDiffY = diffY - this.view.cellSize;
-
-    if (diffX > -otherDiffX)
-        diffX = otherDiffX;
-    if (diffY > -otherDiffY)
-        diffY = otherDiffY;
-
-    this.view.move(-diffX, -diffY);
+    var diff = this.view.getOverlayAlignmentDiff();
+    this.view.move(-diff.x, -diff.y);
 
     var globalPos = this.view.cellContainer.getGlobalPosFromScreenPos(
-        this.view.overlayContainer.x + diffX,
-        this.view.overlayContainer.y + diffY);
+        this.view.overlayContainer.x + diff.x,
+        this.view.overlayContainer.y + diff.y);
 
     this.model.setPosition(globalPos.x, globalPos.y);
 }

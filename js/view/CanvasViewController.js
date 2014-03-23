@@ -11,19 +11,19 @@ var CanvasViewController = function(view, model, rendererContainer) {
 
         switch (e.keyCode) {
             case 87:
-                self.moveY += self.cellSize;
+                self.view.moveY += self.view.cellSize;
                 self.model.setPosition(currentXpos, currentYpos - 1);
                 break;
             case 65:
-                self.moveX += self.cellSize;
+                self.view.moveX += self.view.cellSize;
                 self.model.setPosition(currentXpos - 1, currentYpos);
                 break;
             case 83:
-                self.moveY -= self.cellSize;
+                self.view.moveY -= self.view.cellSize;
                 self.model.setPosition(currentXpos, currentYpos + 1);
                 break;
             case 68:
-                self.moveX -= self.cellSize;
+                self.view.moveX -= self.view.cellSize;
                 self.model.setPosition(currentXpos + 1, currentYpos);
                 break;
         }
@@ -53,7 +53,7 @@ var CanvasViewController = function(view, model, rendererContainer) {
     var self = this;
     $(window).resize(function () {
         self.view.overlayContainer.updateSize();
-        //self.view.forceAlign();
+        self.view.forceAlign();
         self.onDragStop();
     });
 };

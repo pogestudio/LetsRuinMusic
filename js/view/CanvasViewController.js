@@ -123,8 +123,8 @@ CanvasViewController.prototype.onDragStop = function (point, move) {
     this.view.move(-diff.x, -diff.y);
 
     var globalPos = this.view.cellContainer.getGlobalPosFromScreenPos(
-        this.view.overlayContainer.x + diff.x,
-        this.view.overlayContainer.y + diff.y);
+        this.view.overlayContainer.x - this.view.moveX,
+        this.view.overlayContainer.y - this.view.moveY);
 
     this.model.setPosition(globalPos.x, globalPos.y);
 }

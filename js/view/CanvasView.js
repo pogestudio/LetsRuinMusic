@@ -150,6 +150,7 @@ CanvasView.prototype.getOverlayAlignmentDiff = function () {
     var diffX = (this.cellContainer.spriteBatchContainer.position.x - this.overlayContainer.x + this.moveX) % this.cellSize;
     var diffY = (this.cellContainer.spriteBatchContainer.position.y - this.overlayContainer.y + this.moveY) % this.cellSize;
 
+
     diffX = (diffX + this.cellSize) % this.cellSize;
     diffY = (diffY + this.cellSize) % this.cellSize;
 
@@ -161,6 +162,7 @@ CanvasView.prototype.getOverlayAlignmentDiff = function () {
     if (diffY > -otherDiffY)
         diffY = otherDiffY;
 
+    console.log(diffX + "   " + diffY);
     return { x: diffX, y: diffY };
 };
 

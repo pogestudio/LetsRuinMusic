@@ -30,7 +30,7 @@ $(function() {
     audioViewController.addObserverOfLoading(userInstructionsView);
 
     var connection = new Connection(model);
-    connection.connect("ws://ec2-54-186-113-65.us-west-2.compute.amazonaws.com:12001");
+    connection.connect("ws://54.186.149.61:12001");
     //connection.connect("ws://qazeh.no-ip.info:12058");
     model.connection = connection;
 
